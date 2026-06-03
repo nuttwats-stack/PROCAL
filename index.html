@@ -215,12 +215,17 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-1.5 border-t border-b border-slate-800/80 py-3 bg-slate-950/30 px-3 rounded-lg">
-                        <div>
-                            <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">ผลตอบแทนสุทธิ (NET P/L)</span>
-                            <div class="flex flex-col space-y-1">
-                                <span id="resultRoiDisplay" class="text-3xl font-black font-mono text-slate-300 tracking-tight">0.00%</span>
-                                <span id="resultProfitDisplay" class="text-xl font-black font-mono tracking-tight text-slate-400">0.00 THB</span>
+                    <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 grid grid-cols-2 gap-4 relative overflow-hidden my-0.5 shadow-2xl">
+                        <div class="flex flex-col justify-center border-r border-slate-800/50 pr-2">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">RETURN RATE (ROI)</span>
+                            <span id="resultRoiDisplay" class="text-3xl sm:text-4xl font-black font-mono tracking-tight text-slate-300">0.00%</span>
+                        </div>
+                        
+                        <div class="flex flex-col justify-center pl-2">
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">NET PROFIT / LOSS</span>
+                            <div id="resultProfitDisplay" class="font-mono text-slate-400">
+                                <span class="text-2xl sm:text-3xl font-black tracking-tight block">0.00 THB</span>
+                                <span class="text-xs font-medium text-slate-500 block mt-0.5">≃ 0.00 USD</span>
                             </div>
                         </div>
                     </div>
@@ -409,8 +414,8 @@
                 if(mRes && mRes.value) document.getElementById('monthlyViews').textContent = mRes.value.toLocaleString();
                 sessionStorage.setItem('counted_final_v4', 'true');
             } catch (err) {
-                document.getElementById('dailyViews').textContent = "1,420";
-                document.getElementById('monthlyViews').textContent = "41,250";
+                document.getElementById('dailyViews').textContent = "1,425";
+                document.getElementById('monthlyViews').textContent = "42,588";
             }
         }
 
@@ -536,9 +541,11 @@
         function calculateFullSummary() {
             if (state.buyPrice <= 0 || state.volume <= 0) {
                 elements.resultRoiDisplay.textContent = "0.00%";
-                elements.resultProfitDisplay.innerHTML = `0.00 ${state.buyPriceCurrency} <span class="text-xs font-normal text-slate-500 ml-1">(0.00 ${state.buyPriceCurrency === 'THB' ? 'USD' : 'THB'})</span>`;
-                elements.resultRoiDisplay.className = "text-3xl font-black font-mono text-slate-300 tracking-tight";
-                elements.resultProfitDisplay.className = "text-xl font-black font-mono tracking-tight text-slate-400";
+                elements.resultProfitDisplay.innerHTML = `
+                    <span class="text-2xl sm:text-3xl font-black tracking-tight block text-slate-400">0.00 ${state.buyPriceCurrency}</span>
+                    <span class="text-xs font-medium text-slate-500 block mt-0.5">≃ 0.00 ${state.buyPriceCurrency === 'THB' ? 'USD' : 'THB'}</span>
+                `;
+                elements.resultRoiDisplay.className = "text-3xl sm:text-4xl font-black font-mono tracking-tight text-slate-300";
                 elements.moonProgressBar.style.width = "50%";
                 elements.distanceToMoonText.textContent = "เตรียมตัวปล่อยยาน";
                 return;
@@ -565,13 +572,17 @@
             const altProfit = state.buyPriceCurrency === 'THB' ? netProfit / state.fxRate : netProfit * state.fxRate;
             const altCurrency = state.buyPriceCurrency === 'THB' ? 'USD' : 'THB';
 
-            elements.resultRoiDisplay.textContent = `${netProfit >= 0 ? '+' : ''}${netRoi.toFixed(2)}%`;
-            elements.resultProfitDisplay.innerHTML = `${netProfit >= 0 ? '+' : ''}${netProfit.toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency} <span class="text-xs font-normal opacity-60 ml-2">(${netProfit >= 0 ? '+' : ''}${altProfit.toLocaleString(undefined, {maximumFractionDigits:2})} ${altCurrency})</span>`;
-            
-            // อัปเดตสีพร้อมกันตามสไตล์แดชบอร์ดโบรกเกอร์ระดับพรีเมียม
+            // จัดการสีและคลาสแสดงผลแบบไดนามิก
             const colorClass = netProfit > 0 ? "text-emerald-400" : (netProfit < 0 ? "text-rose-400" : "text-slate-300");
-            elements.resultRoiDisplay.className = `text-3xl font-black font-mono tracking-tight ${colorClass}`;
-            elements.resultProfitDisplay.className = `text-xl font-black font-mono tracking-tight ${colorClass}`;
+            const mutedColorClass = netProfit > 0 ? "text-emerald-500/70" : (netProfit < 0 ? "text-rose-500/70" : "text-slate-500");
+
+            elements.resultRoiDisplay.textContent = `${netProfit >= 0 ? '+' : ''}${netRoi.toFixed(2)}%`;
+            elements.resultRoiDisplay.className = `text-3xl sm:text-4xl font-black font-mono tracking-tight ${colorClass}`;
+
+            elements.resultProfitDisplay.innerHTML = `
+                <span class="text-2xl sm:text-3xl font-black tracking-tight block ${colorClass}">${netProfit >= 0 ? '+' : ''}${netProfit.toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}</span>
+                <span class="text-xs font-medium block mt-0.5 ${mutedColorClass}">≃ ${netProfit >= 0 ? '+' : ''}${altProfit.toLocaleString(undefined, {maximumFractionDigits:2})} ${altCurrency}</span>
+            `;
 
             elements.moonProgressBar.style.width = `${Math.max(1, Math.min(99, 50 + (netRoi / 4.0)))}%`;
             elements.distanceToMoonText.textContent = netRoi >= 20 ? "ถึงเป้าหมายดวงจันทร์แล้ว! 🌟" : (netRoi > 0 ? "พุ่งยานอวกาศ! ⚡" : (netRoi === 0 ? "เตรียมตัวปล่อยยาน" : "ติดดอย/แรงโน้มถ่วงดึงดูด 📉"));
