@@ -92,7 +92,7 @@
                                     <button id="btn-invest-usd" onclick="setCurrency('invest', 'USD')" class="px-2 py-0.5 rounded text-slate-400">USD</button>
                                 </div>
                             </div>
-                            <input id="inputInvestment" type="text" placeholder="100,000" oninput="handleFormattedInput(this, 'investment', 'investment')"
+                            <input id="inputInvestment" type="text" placeholder="0" oninput="handleFormattedInput(this, 'investment', 'investment')"
                                 class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-yellow-500 focus:outline-none text-white font-bold">
                             <span id="alt-invest-val" class="block text-xs text-slate-500 text-right mt-1 font-mono">≃ 0.00 USD</span>
                         </div>
@@ -105,7 +105,7 @@
                                     <button id="btn-buyPrice-usd" onclick="setCurrency('buyPrice', 'USD')" class="px-2 py-0.5 rounded text-slate-400">USD</button>
                                 </div>
                             </div>
-                            <input id="inputBuyPrice" type="text" placeholder="50" oninput="handleFormattedInput(this, 'buyPrice', 'buyPrice')"
+                            <input id="inputBuyPrice" type="text" placeholder="0" oninput="handleFormattedInput(this, 'buyPrice', 'buyPrice')"
                                 class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-yellow-500 focus:outline-none text-white font-bold">
                             <span id="alt-buyPrice-val" class="block text-xs text-slate-500 text-right mt-1 font-mono">≃ 0.00 USD</span>
                         </div>
@@ -150,7 +150,7 @@
                         <div>
                             <span class="block text-slate-300 font-medium mb-1.5 text-sm">ราคาตลาดปัจจุบัน (MARKET PRICE)</span>
                             <div class="relative">
-                                <input id="inputCurrentPrice" type="text" placeholder="55.0000" oninput="handleFormattedInput(this, 'currentPrice', 'currentPrice')"
+                                <input id="inputCurrentPrice" type="text" placeholder="0" oninput="handleFormattedInput(this, 'currentPrice', 'currentPrice')"
                                     class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-emerald-500 focus:outline-none text-white font-bold">
                                 <span class="absolute right-3 top-2.5 text-slate-500 font-mono text-sm" id="label-curPrice-match">THB</span>
                             </div>
@@ -159,7 +159,7 @@
                         <div>
                             <span class="block text-slate-300 font-medium mb-1.5 text-sm">ราคาเป้าหมายขาย (TARGET PRICE)</span>
                             <div class="relative">
-                                <input id="inputTargetPrice" type="text" placeholder="55.0000" oninput="handleFormattedInput(this, 'targetPrice', 'targetPrice')"
+                                <input id="inputTargetPrice" type="text" placeholder="0" oninput="handleFormattedInput(this, 'targetPrice', 'targetPrice')"
                                     class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-emerald-500 focus:outline-none text-emerald-400 font-bold">
                                 <span class="absolute right-3 top-2.5 text-slate-500 font-mono text-sm" id="label-targetPrice-match">THB</span>
                             </div>
