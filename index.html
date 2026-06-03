@@ -3,592 +3,393 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROCAL.TH - Mission to the moon</title>
+    <title>PROCAL.TH - Mission to the Moon</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* นีออนสีขาววิ่งรอบกรอบหรูๆ */
-        @keyframes neon-dance {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Kanit:wght@300;500;700&display=swap');
+        
+        body { font-family: 'Inter', 'Kanit', sans-serif; transition: background 1s ease; }
+        
+        /* Aura Background based on Profit/Loss */
+        .aura-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.15; filter: blur(100px); pointer-events: none; }
+        .aura-green { background: radial-gradient(circle at 50% 50%, #10b981, transparent 70%); }
+        .aura-red { background: radial-gradient(circle at 50% 50%, #f43f5e, transparent 70%); }
+
+        @keyframes neon-dance { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .running-neon {
-            position: relative;
-            border: 1px solid transparent;
+            position: relative; border: 1px solid transparent;
             background: linear-gradient(#0e1326, #0e1326) padding-box,
-                        linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0.5), rgba(255,255,255,0.08)) border-box;
-            background-size: 200% 100%;
-            animation: neon-dance 8s linear infinite;
+                        linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.3), rgba(255,255,255,0.05)) border-box;
+            background-size: 200% 100%; animation: neon-dance 8s linear infinite;
         }
-
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-        .glow-pulse { animation: pulse-glow 2s infinite; }
-
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-            -webkit-appearance: none; margin: 0;
-        }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #070a14; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-[#070a14] text-slate-100 min-h-screen font-sans antialiased flex flex-col justify-between p-4 lg:p-5 select-none overflow-x-hidden text-base">
+<body class="bg-[#070a14] text-slate-100 min-h-screen p-4 overflow-x-hidden">
 
-    <div id="spaceRocket" class="fixed text-4xl opacity-20 pointer-events-none hidden lg:block" style="top: 0; left: 0; transform: translate(0px, 0px) rotate(45deg); will-change: transform; z-index: 1;">🚀</div>
+    <div id="aura" class="aura-bg"></div>
 
-    <div class="w-full max-w-[1600px] mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch relative z-10">
+    <div class="w-full max-w-[1400px] mx-auto space-y-6 relative z-10">
         
-        <div class="lg:col-span-2 flex flex-col justify-between bg-[#0e1326]/60 p-4 rounded-xl border border-yellow-500/20 text-center text-base">
-            <div>
-                <div class="flex items-center justify-center space-x-1 bg-yellow-500/10 text-yellow-400 font-bold py-1.5 px-3 rounded-full mb-4 border border-yellow-500/10 text-sm tracking-wider">
-                    <span>👑 SPONSOR SPACE</span>
-                </div>
-                <div class="w-full aspect-[4/5] bg-slate-950/80 rounded-lg border border-slate-800/60 flex flex-col items-center justify-center p-3 text-slate-500 mb-4">
-                    <span class="font-bold text-slate-400 mb-1 text-sm">Wide Skyscraper</span>
-                    <span class="text-xs">160 x 600 px</span>
+        <!-- Header & Language Switcher -->
+        <header class="flex flex-col md:flex-row justify-between items-center bg-[#0e1326] p-4 rounded-2xl border border-slate-800">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl">🚀</span>
+                <div>
+                    <h1 class="text-xl font-black tracking-tighter text-white">PROCAL.TH</h1>
+                    <p class="text-[10px] text-yellow-400 font-bold uppercase tracking-widest" data-i18n="tagline">Mission to the Moon</p>
                 </div>
             </div>
-            <div class="space-y-3 bg-slate-950/40 p-3 rounded-lg border border-slate-900 mt-auto">
-                <p class="text-sm text-slate-400 leading-relaxed text-center">พื้นที่ประชาสัมพันธ์สำหรับโครงการ คริปโต และบล็อกเชนสตาร์ทอัพ</p>
-                <a href="https://t.me/yourusername" target="_blank" class="block w-full bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold py-2 rounded-lg transition-all text-center text-sm">
-                    ติดต่อโฆษณา 📩
-                </a>
-            </div>
-        </div>
 
-        <div class="lg:col-span-8 flex flex-col justify-between space-y-4">
-            
-            <header class="flex flex-col sm:flex-row justify-between items-center bg-[#0e1326] px-6 py-4 rounded-xl border border-slate-800/60">
-                <div class="flex items-center space-x-3">
-                    <div class="text-3xl">🚀</div>
-                    <div>
-                        <h1 class="text-2xl font-black tracking-wide text-white">
-                            PROCAL.TH <span class="text-sm text-slate-400 font-medium">BY NWS</span>
-                        </h1>
-                        <p class="text-xs text-yellow-400 tracking-wider font-bold uppercase mt-0.5">MISSION TO THE MOON STOCK CALCULATOR</p>
+            <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                <!-- Lang Selector -->
+                <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 space-x-1">
+                    <button onclick="changeLang('th')" class="lang-btn px-2 py-1 rounded-lg text-xs font-bold transition-all" id="lang-th">TH</button>
+                    <button onclick="changeLang('en')" class="lang-btn px-2 py-1 rounded-lg text-xs font-bold transition-all" id="lang-en">EN</button>
+                    <button onclick="changeLang('cn')" class="lang-btn px-2 py-1 rounded-lg text-xs font-bold transition-all" id="lang-cn">CN</button>
+                    <button onclick="changeLang('ru')" class="lang-btn px-2 py-1 rounded-lg text-xs font-bold transition-all" id="lang-ru">RU</button>
+                </div>
+                <div class="h-8 w-px bg-slate-800"></div>
+                <div class="flex items-center space-x-2 text-xs font-mono text-slate-400">
+                    <span data-i18n="fx_rate">FX Rate:</span>
+                    <input id="fxRate" type="number" value="35.00" oninput="updateAll()" class="bg-transparent text-yellow-400 font-bold w-12 focus:outline-none">
+                </div>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left Ads -->
+            <div class="hidden lg:flex lg:col-span-2 flex-col space-y-4">
+                <div class="bg-yellow-500/5 border border-yellow-500/20 p-4 rounded-xl text-center">
+                    <p class="text-[10px] font-bold text-yellow-500 mb-4" data-i18n="sponsor">SPONSOR SPACE</p>
+                    <div class="aspect-[1/3] bg-slate-950 rounded-lg flex items-center justify-center text-slate-700 text-xs">Banner</div>
+                    <a href="https://line.me/ti/p/wcpnmupu62" target="_blank" class="block mt-4 bg-yellow-500 text-slate-950 py-2 rounded-lg font-bold text-xs" data-i18n="contact">Contact LINE</a>
+                </div>
+            </div>
+
+            <!-- Center Calculator -->
+            <div class="lg:col-span-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Buy Entry -->
+                    <div class="running-neon p-5 rounded-2xl space-y-4">
+                        <h2 class="text-sm font-bold text-yellow-400 border-b border-yellow-500/20 pb-2" data-i18n="buy_entry">01 Buy Entry</h2>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs text-slate-400 block mb-1" data-i18n="invest_amt">Investment Amount</label>
+                                <input id="invest" type="text" placeholder="0" oninput="handleInput(this, 'invest')" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl font-mono focus:border-yellow-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-400 block mb-1" data-i18n="buy_price">Buy Price</label>
+                                <input id="buyPrice" type="text" placeholder="0" oninput="handleInput(this, 'buyPrice')" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl font-mono focus:border-yellow-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-400 block mb-1" data-i18n="volume">Volume (Shares)</label>
+                                <input id="volume" type="text" placeholder="0" oninput="handleInput(this, 'volume')" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl font-mono focus:border-yellow-500 outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Target Exit -->
+                    <div class="running-neon p-5 rounded-2xl space-y-4">
+                        <h2 class="text-sm font-bold text-emerald-400 border-b border-emerald-500/20 pb-2" data-i18n="target_exit">02 Target Exit</h2>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-xs text-slate-400 block mb-1" data-i18n="target_roi">Target ROI (%)</label>
+                                <input id="targetRoi" type="text" placeholder="0" oninput="handleInput(this, 'targetRoi')" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl font-mono focus:border-emerald-500 outline-none">
+                                <input id="roiSlider" type="range" min="-100" max="100" value="0" oninput="handleSlider(this)" class="w-full mt-2 accent-emerald-500">
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-400 block mb-1" data-i18n="sell_price">Sell Price</label>
+                                <input id="sellPrice" type="text" placeholder="0" oninput="handleInput(this, 'sellPrice')" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl font-mono focus:border-emerald-500 outline-none">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex items-center space-x-2 mt-3 sm:mt-0 bg-slate-950 px-4 py-1.5 rounded-lg border border-slate-800 text-sm">
-                    <label class="text-slate-400 font-mono">อัตราแลกเปลี่ยน USD/THB:</label>
-                    <input id="globalFxRate" type="text" value="35.00" oninput="handleDirectFxInput(this)"
-                        class="w-16 bg-transparent text-right font-bold text-yellow-400 font-mono focus:outline-none text-base">
-                </div>
-            </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
-                <div class="running-neon p-5 rounded-xl space-y-4">
-                    <div class="flex justify-between items-center border-b border-yellow-500/20 pb-2">
-                        <h2 class="text-base font-bold text-yellow-400">01 ต้นทุนการซื้อ (Buy Entry)</h2>
-                        <span class="text-xs text-slate-500">กรอก 2 ช่องเพื่อหาค่าที่เหลือ</span>
+                <!-- Result Card -->
+                <div id="resultCard" class="running-neon p-6 rounded-3xl space-y-6">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-cyan-400 tracking-widest" data-i18n="summary_title">MISSION SUMMARY</span>
+                        <div class="flex space-x-2">
+                            <button onclick="downloadResult()" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs">📸</button>
+                            <button onclick="copyShareLink()" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-xs">🔗</button>
+                        </div>
                     </div>
                     
-                    <div class="space-y-3">
-                        <div>
-                            <div class="flex justify-between mb-1.5">
-                                <span class="text-slate-300 font-medium text-sm">เงินลงทุนรวม (INVESTMENT)</span>
-                                <div class="flex space-x-1 bg-slate-950 p-0.5 rounded text-xs">
-                                    <button id="btn-invest-thb" onclick="setCurrency('invest', 'THB')" class="px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold">THB</button>
-                                    <button id="btn-invest-usd" onclick="setCurrency('invest', 'USD')" class="px-2 py-0.5 rounded text-slate-400">USD</button>
-                                </div>
-                            </div>
-                            <input id="inputInvestment" type="text" placeholder="100,000" oninput="handleFormattedInput(this, 'investment', 'investment')"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-yellow-500 focus:outline-none text-white font-bold">
-                            <span id="alt-invest-val" class="block text-xs text-slate-500 text-right mt-1 font-mono">≃ 0.00 USD</span>
+                    <div class="grid grid-cols-2 gap-4 bg-slate-950/80 p-6 rounded-2xl border border-slate-800 relative overflow-hidden">
+                        <div class="border-r border-slate-800">
+                            <p class="text-[10px] text-slate-500 font-bold uppercase mb-1" data-i18n="net_roi">Net ROI</p>
+                            <h3 id="resRoi" class="text-4xl font-black font-mono text-slate-400">0.00%</h3>
                         </div>
-
-                        <div>
-                            <div class="flex justify-between mb-1.5">
-                                <span class="text-slate-300 font-medium text-sm">ราคาซื้อต่อหุ้น (BUY PRICE)</span>
-                                <div class="flex space-x-1 bg-slate-950 p-0.5 rounded text-xs">
-                                    <button id="btn-buyPrice-thb" onclick="setCurrency('buyPrice', 'THB')" class="px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold">THB</button>
-                                    <button id="btn-buyPrice-usd" onclick="setCurrency('buyPrice', 'USD')" class="px-2 py-0.5 rounded text-slate-400">USD</button>
-                                </div>
-                            </div>
-                            <input id="inputBuyPrice" type="text" placeholder="50" oninput="handleFormattedInput(this, 'buyPrice', 'buyPrice')"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-yellow-500 focus:outline-none text-white font-bold">
-                            <span id="alt-buyPrice-val" class="block text-xs text-slate-500 text-right mt-1 font-mono">≃ 0.00 USD</span>
+                        <div class="pl-4">
+                            <p class="text-[10px] text-slate-500 font-bold uppercase mb-1" data-i18n="net_profit">Net Profit</p>
+                            <h3 id="resProfitTHB" class="text-2xl font-black font-mono text-slate-400">0.00 THB</h3>
+                            <p id="resProfitUSD" class="text-xs font-mono text-slate-600">≃ 0.00 USD</p>
                         </div>
+                    </div>
 
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5 text-sm">จำนวนหุ้นที่จะได้รับ (VOLUME)</span>
-                            <div class="relative">
-                                <input id="inputVolume" type="text" placeholder="2,000" oninput="handleFormattedInput(this, 'volume', 'volume')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-yellow-500 focus:outline-none text-white font-bold">
-                                <span class="absolute right-3 top-2.5 text-slate-500 font-medium text-sm">หุ้น</span>
-                            </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-[10px] font-bold text-slate-500">
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-900">
+                            <span class="block opacity-60" data-i18n="total_fees">Total Fees</span>
+                            <span id="resFees" class="text-slate-300">0.00 THB</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-900">
+                            <span class="block opacity-60" data-i18n="breakeven">Breakeven</span>
+                            <span id="resBreakeven" class="text-yellow-500">0.00</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-900">
+                            <span class="block opacity-60" data-i18n="cost_basis">Total Cost</span>
+                            <span id="resCost" class="text-slate-300">0.00</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-900">
+                            <button onclick="saveToHistory()" class="w-full h-full text-cyan-400 hover:text-white" data-i18n="save_history">Save to History</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="running-neon p-5 rounded-xl space-y-4">
-                    <div class="flex justify-between items-center border-b border-emerald-500/20 pb-2">
-                        <h2 class="text-base font-bold text-emerald-400">02 เป้าหมายราคาขาย (Target Exit)</h2>
-                        <span class="text-xs text-slate-500">คำนวณราคาขายตามเป้า</span>
+                <!-- History Section -->
+                <div class="bg-[#0e1326] rounded-2xl border border-slate-800 overflow-hidden">
+                    <div class="p-4 border-b border-slate-800 flex justify-between">
+                        <h2 class="text-xs font-bold text-slate-400 uppercase" data-i18n="history_title">Recent Mission History</h2>
+                        <button onclick="clearHistory()" class="text-[10px] text-rose-500 hover:underline" data-i18n="clear">Clear All</button>
                     </div>
-
-                    <div class="space-y-3">
-                        <div>
-                            <div class="flex justify-between items-center mb-1.5">
-                                <span class="text-slate-300 font-medium text-sm">เปอร์เซ็นต์เป้าหมาย (ROI TARGET)</span>
-                                <div class="flex space-x-1 text-xs">
-                                    <button onclick="setQuickRoi(10)" class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20">+10%</button>
-                                    <button onclick="setQuickRoi(50)" class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20">+50%</button>
-                                    <button onclick="setQuickRoi(-10)" class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20">-10%</button>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center space-x-2 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2">
-                                <input id="inputTargetRoi" type="text" placeholder="10" oninput="handleFormattedInput(this, 'targetRoi', 'roi')"
-                                    class="w-full bg-transparent font-mono text-base focus:outline-none text-white font-bold">
-                                <span class="text-slate-500 font-bold text-sm">%</span>
-                            </div>
-                            <input id="targetRoiSlider" type="range" min="-200" max="200" value="0" step="1" oninput="handleSliderChange(this.value)"
-                                class="w-full accent-emerald-500 h-1.5 bg-slate-800 rounded-lg cursor-pointer mt-2.5">
-                        </div>
-
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5 text-sm">ราคาตลาดปัจจุบัน (MARKET PRICE)</span>
-                            <div class="relative">
-                                <input id="inputCurrentPrice" type="text" placeholder="55.0000" oninput="handleFormattedInput(this, 'currentPrice', 'currentPrice')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-emerald-500 focus:outline-none text-white font-bold">
-                                <span class="absolute right-3 top-2.5 text-slate-500 font-mono text-sm" id="label-curPrice-match">THB</span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5 text-sm">ราคาเป้าหมายขาย (TARGET PRICE)</span>
-                            <div class="relative">
-                                <input id="inputTargetPrice" type="text" placeholder="55.0000" oninput="handleFormattedInput(this, 'targetPrice', 'targetPrice')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-emerald-500 focus:outline-none text-emerald-400 font-bold">
-                                <span class="absolute right-3 top-2.5 text-slate-500 font-mono text-sm" id="label-targetPrice-match">THB</span>
-                            </div>
-                        </div>
+                    <div class="max-h-[200px] overflow-y-auto custom-scrollbar">
+                        <table class="w-full text-left text-[11px] font-mono">
+                            <thead class="bg-slate-950 text-slate-500 sticky top-0">
+                                <tr>
+                                    <th class="p-3" data-i18n="h_vol">VOL</th>
+                                    <th class="p-3" data-i18n="h_buy">BUY</th>
+                                    <th class="p-3" data-i18n="h_sell">SELL</th>
+                                    <th class="p-3" data-i18n="h_profit">PROFIT</th>
+                                    <th class="p-3 text-right" data-i18n="h_roi">ROI</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyList">
+                                <!-- Data inject here -->
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-
-                <div class="running-neon p-5 rounded-xl space-y-4">
-                    <div class="flex justify-between items-center border-b border-purple-500/20 pb-2">
-                        <h2 class="text-base font-bold text-purple-400">03 หักค่าธรรมเนียม & ภาษี (Fees)</h2>
-                        <div class="flex space-x-1 text-xs">
-                            <button onclick="applyFeePreset(0.157)" class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">คอมไทย (0.157%)</button>
-                            <button onclick="applyFeePreset(0.08)" class="px-2 py-0.5 rounded bg-slate-800 text-slate-400">ออนไลน์ (0.08%)</button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5 text-sm">ค่าคอมมิชชันโบรกเกอร์ (%)</span>
-                            <div class="relative">
-                                <input id="inputFeePercent" type="text" value="0.157" oninput="handleFormattedInput(this, 'feePercent', 'fee')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:outline-none text-white">
-                                <span class="absolute right-3 top-2.5 text-slate-500 text-sm">%</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5 text-sm">ภาษีมูลค่าเพิ่ม VAT (%)</span>
-                            <div class="relative">
-                                <input id="inputTaxPercent" type="text" value="7.0" oninput="handleFormattedInput(this, 'taxPercent', 'tax')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:outline-none text-white">
-                                <span class="absolute right-3 top-2.5 text-slate-500 text-sm">%</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5 text-sm">ค่าใช้จ่ายเพิ่มเติมอื่น ๆ (ต่อรอบ)</span>
-                            <div class="relative">
-                                <input id="inputOtherExpenses" type="text" value="0" oninput="handleFormattedInput(this, 'otherExpenses', 'expenses')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:outline-none text-white">
-                                <span class="absolute right-3 top-2.5 text-slate-500 font-mono text-sm" id="other-expenses-currency">THB</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="resultCard" class="running-neon p-5 rounded-xl space-y-3.5 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center border-b border-cyan-500/20 pb-2">
-                            <span class="text-sm font-bold text-cyan-400">เป้าหมายระยะการเดินทาง (MOON PROGRESS)</span>
-                            <span id="distanceToMoonText" class="text-xs text-slate-400 font-bold">เตรียมตัวปล่อยยาน</span>
-                        </div>
-                        <div class="relative w-full h-2.5 bg-slate-950 rounded-full border border-slate-800 overflow-hidden mt-2.5">
-                            <div id="moonProgressBar" class="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-rose-500 via-yellow-500 to-emerald-500 glow-pulse" style="width: 50%;"></div>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 grid grid-cols-2 gap-4 relative overflow-hidden my-0.5 shadow-2xl">
-                        <div class="flex flex-col justify-center border-r border-slate-800/50 pr-2">
-                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">RETURN RATE (ROI)</span>
-                            <span id="resultRoiDisplay" class="text-3xl sm:text-4xl font-black font-mono tracking-tight text-slate-300">0.00%</span>
-                        </div>
-                        
-                        <div class="flex flex-col justify-center pl-2">
-                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">NET PROFIT / LOSS</span>
-                            <div id="resultProfitDisplay" class="font-mono text-slate-400">
-                                <span class="text-2xl sm:text-3xl font-black tracking-tight block">0.00 THB</span>
-                                <span class="text-xs font-medium text-slate-500 block mt-0.5">≃ 0.00 USD</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-xs font-mono space-y-1.5 text-slate-400">
-                        <div class="flex justify-between">
-                            <span>💸 ค่าคอมรวม (Comm):</span>
-                            <span id="detailCommFees" class="text-slate-200 font-bold">0.00 THB</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>🧾 ภาษีรวม (VAT):</span>
-                            <span id="detailVatFees" class="text-slate-200 font-bold">0.00 THB</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>⚓ ค่าอื่น ๆ (Other Exp):</span>
-                            <span id="detailOtherFees" class="text-slate-200 font-bold">0.00 THB</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-yellow-500/10 p-2.5 rounded-lg border border-yellow-500/20 flex justify-between items-center text-sm">
-                        <span class="font-bold text-yellow-500">⚖️ จุดคุ้มทุน (Breakeven Price):</span>
-                        <span id="detailBreakevenPrice" class="font-black text-yellow-400 font-mono text-base">0.00 THB</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <footer class="flex justify-between items-center text-sm bg-slate-950/60 p-3 rounded-xl border border-slate-900 font-mono">
-                <div class="text-slate-300 flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
-                    <span>ยอดหักสะสมรวม (Comm + VAT): <span id="detailTotalFees" class="text-purple-400 font-bold">0.00 THB</span></span>
-                </div>
-                <button onclick="resetCalculator()" class="text-slate-400 hover:text-white transition-all flex items-center space-x-1 text-xs">
-                    <span>🔄 รีเซ็ตค่าทั้งหมด</span>
-                </button>
-            </footer>
-
-        </div>
-
-        <div class="lg:col-span-2 flex flex-col justify-between bg-[#0e1326]/60 p-4 rounded-xl border border-emerald-500/20 text-center text-base">
-            <div>
-                <div class="flex items-center justify-center space-x-1 bg-emerald-500/10 text-emerald-400 font-bold py-1.5 px-3 rounded-full mb-4 border border-emerald-500/10 text-sm tracking-wider">
-                    <span>✳️ SPONSOR SPACE</span>
-                </div>
-                <div class="w-full aspect-[4/5] bg-slate-950/80 rounded-lg border border-slate-800/60 flex flex-col items-center justify-center p-3 text-slate-500 mb-4">
-                    <span class="font-bold text-slate-400 mb-1 text-sm">Skyscraper</span>
-                    <span class="text-xs">120 x 600 px</span>
                 </div>
             </div>
-            <div class="space-y-3 bg-slate-950/40 p-3 rounded-lg border border-slate-900 mt-auto">
-                <p class="text-sm text-slate-400 leading-relaxed text-center">พื้นที่ประชาสัมพันธ์เพื่อเข้าถึงกลุ่มเทรดเดอร์และนักลงทุนคุณภาพ</p>
-                <a href="https://t.me/yourusername" target="_blank" class="block w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 rounded-lg transition-all text-center text-sm">
-                    ติดต่อโฆษณา 📩
-                </a>
-            </div>
-        </div>
 
+            <!-- Right Ads -->
+            <div class="hidden lg:flex lg:col-span-2 flex-col space-y-4">
+                <div class="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-xl text-center">
+                    <p class="text-[10px] font-bold text-emerald-500 mb-4" data-i18n="sponsor">SPONSOR SPACE</p>
+                    <div class="aspect-[1/3] bg-slate-950 rounded-lg flex items-center justify-center text-slate-700 text-xs">Banner</div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <footer class="w-full max-w-[1600px] mx-auto flex flex-col sm:flex-row justify-between items-center sm:items-end text-xs text-slate-500 mt-5 pb-1 font-mono px-2 relative z-10 gap-3">
-        <div class="text-center sm:text-left leading-relaxed">
-            © 2026 PROCAL.TH ALL RIGHTS RESERVED <br>
-            <span class="text-[10px] text-slate-700">SYSTEM STATUS: ONLINE | SECURE DEPLOYED</span>
-        </div>
-        
-        <div class="bg-slate-950/40 px-4 py-2 rounded-lg border border-slate-900 text-right space-y-0.5 min-w-[160px]">
-            <div class="flex justify-between items-center space-x-6 text-xs">
-                <span class="text-slate-500 uppercase tracking-wider font-sans font-medium">Today</span>
-                <span id="dailyViews" class="text-slate-200 font-bold font-mono">...</span>
-            </div>
-            <div class="flex justify-between items-center space-x-6 text-xs border-t border-slate-900 pt-0.5">
-                <span class="text-slate-500 uppercase tracking-wider font-sans font-medium">Monthly</span>
-                <span id="monthlyViews" class="text-slate-400 font-semibold font-mono">...</span>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        let state = {
-            investCurrency: 'THB',
-            buyPriceCurrency: 'THB',
-            investment: 0,
-            buyPrice: 0,
-            volume: 0,
-            currentPrice: 0,
-            targetRoi: 0,
-            targetPrice: 0,
-            fxRate: 35.0,
-            feePercent: 0.157,
-            taxPercent: 7.0,
-            otherExpenses: 0
+        const i18n = {
+            th: {
+                tagline: "คำนวณกำไรหุ้นทะลุดวงจันทร์", sponsor: "พื้นที่โฆษณา", contact: "ติดต่อไลน์นัท",
+                buy_entry: "01 ต้นทุนการซื้อ", target_exit: "02 เป้าหมายขาย", summary_title: "สรุปผลการเดินทาง",
+                invest_amt: "เงินลงทุนรวม", buy_price: "ราคาซื้อ", volume: "จำนวนหุ้น", target_roi: "เป้าหมายกำไร (%)", sell_price: "ราคาขาย",
+                net_roi: "กำไรสุทธิ (%)", net_profit: "กำไรสุทธิ (เงิน)", total_fees: "ค่าธรรมเนียมรวม", breakeven: "จุดคุ้มทุน",
+                cost_basis: "ต้นทุนรวมจริง", save_history: "บันทึกประวัติ", history_title: "ประวัติการคำนวณ",
+                clear: "ล้างทั้งหมด", fx_rate: "อัตราแลกเปลี่ยน:", h_vol: "หุ้น", h_buy: "ซื้อ", h_sell: "ขาย", h_profit: "กำไร", h_roi: "ROI"
+            },
+            en: {
+                tagline: "MISSION TO THE MOON CALCULATOR", sponsor: "SPONSOR", contact: "CONTACT LINE",
+                buy_entry: "01 BUY ENTRY", target_exit: "02 TARGET EXIT", summary_title: "MISSION SUMMARY",
+                invest_amt: "INVESTMENT", buy_price: "BUY PRICE", volume: "VOLUME", target_roi: "TARGET ROI (%)", sell_price: "SELL PRICE",
+                net_roi: "NET ROI (%)", net_profit: "NET PROFIT", total_fees: "TOTAL FEES", breakeven: "BREAKEVEN",
+                cost_basis: "TOTAL COST", save_history: "SAVE HISTORY", history_title: "MISSION HISTORY",
+                clear: "CLEAR", fx_rate: "FX RATE:", h_vol: "VOL", h_buy: "BUY", h_sell: "SELL", h_profit: "PROFIT", h_roi: "ROI"
+            },
+            cn: {
+                tagline: "月球任务利润计算器", sponsor: "赞助商", contact: "联系 LINE",
+                buy_entry: "01 买入成本", target_exit: "02 目标卖出", summary_title: "任务总结",
+                invest_amt: "投资总额", buy_price: "买入价", volume: "成交量", target_roi: "目标回报率 (%)", sell_price: "卖出价",
+                net_roi: "净回报率 (%)", net_profit: "净利润", total_fees: "总费用", breakeven: "收支平衡",
+                cost_basis: "实际成本", save_history: "保存记录", history_title: "计算历史",
+                clear: "清除", fx_rate: "汇率:", h_vol: "量", h_buy: "买", h_sell: "卖", h_profit: "利润", h_roi: "ROI"
+            },
+            ru: {
+                tagline: "КАЛЬКУЛЯТОР ПРИБЫЛИ НА ЛУНУ", sponsor: "СПОНСОР", contact: "СВЯЗАТЬСЯ В LINE",
+                buy_entry: "01 ВХОД В ПОКУПКУ", target_exit: "02 ЦЕЛЬ ВЫХОДА", summary_title: "ИТОГИ МИССИИ",
+                invest_amt: "ИНВЕСТИЦИИ", buy_price: "ЦЕНА ПОКУПКИ", volume: "ОБЪЕМ", target_roi: "ЦЕЛЬ ROI (%)", sell_price: "ЦЕНА ПРОДАЖИ",
+                net_roi: "ЧИСТЫЙ ROI (%)", net_profit: "ЧИСТАЯ ПРИБЫЛЬ", total_fees: "ВСЕГО КОМИССИЙ", breakeven: "БЕЗУБЫТОЧНОСТЬ",
+                cost_basis: "ОБЩАЯ СТОИМОСТЬ", save_history: "СОХРАНИТЬ", history_title: "ИСТОРИЯ МИССИЙ",
+                clear: "ОЧИСТИТЬ", fx_rate: "КУРС:", h_vol: "ОБЪЕМ", h_buy: "ПОКУПКА", h_sell: "ПРОДАЖА", h_profit: "ДОХОД", h_roi: "ROI"
+            }
         };
 
-        const elements = {
-            investment: document.getElementById('inputInvestment'),
-            buyPrice: document.getElementById('inputBuyPrice'),
-            volume: document.getElementById('inputVolume'),
-            currentPrice: document.getElementById('inputCurrentPrice'),
-            targetRoi: document.getElementById('inputTargetRoi'),
-            targetRoiSlider: document.getElementById('targetRoiSlider'),
-            targetPrice: document.getElementById('inputTargetPrice'),
-            fxRate: document.getElementById('globalFxRate'),
-            feePercent: document.getElementById('inputFeePercent'),
-            taxPercent: document.getElementById('inputTaxPercent'),
-            otherExpenses: document.getElementById('inputOtherExpenses'),
-            labelCurPriceMatch: document.getElementById('label-curPrice-match'),
-            labelTargetPriceMatch: document.getElementById('label-targetPrice-match'),
-            otherExpensesCurrency: document.getElementById('other-expenses-currency'),
-            altInvestVal: document.getElementById('alt-invest-val'),
-            altBuyPriceVal: document.getElementById('alt-buyPrice-val'),
-            resultRoiDisplay: document.getElementById('resultRoiDisplay'),
-            resultProfitDisplay: document.getElementById('resultProfitDisplay'),
-            detailCommFees: document.getElementById('detailCommFees'),
-            detailVatFees: document.getElementById('detailVatFees'),
-            detailOtherFees: document.getElementById('detailOtherFees'),
-            detailTotalFees: document.getElementById('detailTotalFees'),
-            detailBreakevenPrice: document.getElementById('detailBreakevenPrice'),
-            moonProgressBar: document.getElementById('moonProgressBar'),
-            distanceToMoonText: document.getElementById('distanceToMoonText')
+        let currentLang = 'th';
+        let state = { invest: 0, buyPrice: 0, volume: 0, targetRoi: 0, sellPrice: 0, fx: 35.0 };
+
+        window.onload = () => {
+            loadParams();
+            renderHistory();
+            changeLang(currentLang);
+            updateAll();
         };
 
-        window.onload = function() {
-            updateCurrencyLabels();
-            calculateFullSummary();
-            initPhysicsRocket();
-            updateLiveCounters();
-        };
+        function changeLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerText = i18n[lang][key];
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.className = btn.id === `lang-${lang}` ? 'lang-btn px-2 py-1 rounded-lg text-xs font-bold bg-yellow-500 text-slate-950' : 'lang-btn px-2 py-1 rounded-lg text-xs font-bold text-slate-400';
+            });
+        }
 
-        function initPhysicsRocket() {
-            const rocket = document.getElementById('spaceRocket');
-            if (!rocket) return;
+        function handleInput(el, key) {
+            let val = el.value.replace(/,/g, '');
+            state[key] = parseFloat(val) || 0;
+            
+            if (key === 'invest' || key === 'buyPrice') {
+                if (state.buyPrice > 0) state.volume = Math.floor(state.invest / state.buyPrice);
+                document.getElementById('volume').value = state.volume.toLocaleString();
+            } else if (key === 'volume') {
+                state.invest = state.volume * state.buyPrice;
+                document.getElementById('invest').value = state.invest.toLocaleString();
+            }
 
-            let posX = Math.random() * (window.innerWidth - 120) + 40;
-            let posY = Math.random() * (window.innerHeight - 120) + 40;
-            let velX = (Math.random() - 0.5) * 1.6;
-            let velY = (Math.random() - 0.5) * 1.6;
+            if (key === 'targetRoi') {
+                state.sellPrice = state.buyPrice * (1 + (state.targetRoi / 100));
+                document.getElementById('sellPrice').value = state.sellPrice.toLocaleString(undefined, {maximumFractionDigits: 4});
+                document.getElementById('roiSlider').value = state.targetRoi;
+            } else if (key === 'sellPrice') {
+                if (state.buyPrice > 0) state.targetRoi = ((state.sellPrice - state.buyPrice) / state.buyPrice) * 100;
+                document.getElementById('targetRoi').value = state.targetRoi.toFixed(2);
+                document.getElementById('roiSlider').value = state.targetRoi;
+            }
 
-            if (Math.abs(velX) < 0.4) velX = velX > 0 ? 0.6 : -0.6;
-            if (Math.abs(velY) < 0.4) velY = velY > 0 ? 0.6 : -0.6;
+            el.value = (key === 'volume' || key === 'invest' || key === 'buyPrice') ? formatNum(val) : val;
+            updateAll();
+        }
 
-            function frameUpdate() {
-                posX += velX;
-                posY += velY;
-                const rW = 40, rH = 40;
-                let bounced = false;
+        function handleSlider(el) {
+            state.targetRoi = parseFloat(el.value);
+            document.getElementById('targetRoi').value = state.targetRoi;
+            state.sellPrice = state.buyPrice * (1 + (state.targetRoi / 100));
+            document.getElementById('sellPrice').value = state.sellPrice.toFixed(4);
+            updateAll();
+        }
 
-                if (posX < 0) { posX = 0; velX = -velX + (Math.random() - 0.5) * 0.3; bounced = true; }
-                else if (posX > window.innerWidth - rW) { posX = window.innerWidth - rW; velX = -velX + (Math.random() - 0.5) * 0.3; bounced = true; }
+        function formatNum(n) {
+            let parts = n.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join(".");
+        }
 
-                if (posY < 0) { posY = 0; velY = -velY + (Math.random() - 0.5) * 0.3; bounced = true; }
-                else if (posY > window.innerHeight - rH) { posY = window.innerHeight - rH; velY = -velY + (Math.random() - 0.5) * 0.3; bounced = true; }
+        function updateAll() {
+            state.fx = parseFloat(document.getElementById('fxRate').value) || 35.0;
+            const feeRate = 0.00157; // 0.157%
+            const vatRate = 0.07;
+            
+            const costGross = state.buyPrice * state.volume;
+            const buyFee = costGross * feeRate;
+            const buyVat = buyFee * vatRate;
+            const totalCost = costGross + buyFee + buyVat;
 
-                if (bounced) {
-                    const totalSpeed = Math.sqrt(velX * velX + velY * velY);
-                    if (totalSpeed > 2.6) { velX *= 0.85; velY *= 0.85; }
-                    if (totalSpeed < 0.7) { velX *= 1.25; velY *= 1.25; }
+            const sellGross = state.sellPrice * state.volume;
+            const sellFee = sellGross * feeRate;
+            const sellVat = sellFee * vatRate;
+            const totalReceive = sellGross - sellFee - sellVat;
+
+            const netProfit = totalReceive - totalCost;
+            const netRoi = totalCost > 0 ? (netProfit / totalCost) * 100 : 0;
+            const totalFees = buyFee + buyVat + sellFee + sellVat;
+            const breakeven = totalCost / (state.volume * (1 - (feeRate * (1 + vatRate))));
+
+            // UI Updates
+            const resRoiEl = document.getElementById('resRoi');
+            const resProfitEl = document.getElementById('resProfitTHB');
+            const aura = document.getElementById('aura');
+
+            resRoiEl.innerText = `${netProfit >= 0 ? '+' : ''}${netRoi.toFixed(2)}%`;
+            resProfitEl.innerText = `${netProfit >= 0 ? '+' : ''}${netProfit.toLocaleString(undefined, {maximumFractionDigits:2})} THB`;
+            document.getElementById('resProfitUSD').innerText = `≃ ${(netProfit / state.fx).toLocaleString(undefined, {maximumFractionDigits:2})} USD`;
+            document.getElementById('resFees').innerText = `${totalFees.toLocaleString(undefined, {maximumFractionDigits:2})} THB`;
+            document.getElementById('resBreakeven').innerText = breakeven.toFixed(4);
+            document.getElementById('resCost').innerText = totalCost.toLocaleString(undefined, {maximumFractionDigits:2});
+
+            // Color Logic
+            const colorClass = netProfit > 0 ? 'text-emerald-400' : (netProfit < 0 ? 'text-rose-500' : 'text-slate-400');
+            resRoiEl.className = `text-4xl font-black font-mono ${colorClass}`;
+            resProfitEl.className = `text-2xl font-black font-mono ${colorClass}`;
+            aura.className = `aura-bg ${netProfit > 0 ? 'aura-green' : (netProfit < 0 ? 'aura-red' : '')}`;
+        }
+
+        function saveToHistory() {
+            if (state.volume <= 0) return;
+            const profit = document.getElementById('resProfitTHB').innerText;
+            const roi = document.getElementById('resRoi').innerText;
+            const item = { 
+                vol: state.volume, buy: state.buyPrice, sell: state.sellPrice, 
+                profit: profit, roi: roi, color: state.targetRoi >= 0 ? 'text-emerald-400' : 'text-rose-500'
+            };
+            let history = JSON.parse(localStorage.getItem('moo_history') || '[]');
+            history.unshift(item);
+            localStorage.setItem('moo_history', JSON.stringify(history.slice(0, 10)));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const history = JSON.parse(localStorage.getItem('moo_history') || '[]');
+            document.getElementById('historyList').innerHTML = history.map(h => `
+                <tr class="border-b border-slate-900 hover:bg-slate-900/50">
+                    <td class="p-3 text-slate-400">${h.vol.toLocaleString()}</td>
+                    <td class="p-3 text-slate-400">${h.buy}</td>
+                    <td class="p-3 text-slate-400">${h.sell.toFixed(2)}</td>
+                    <td class="p-3 ${h.color} font-bold">${h.profit}</td>
+                    <td class="p-3 text-right ${h.color} font-bold">${h.roi}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearHistory() { localStorage.removeItem('moo_history'); renderHistory(); }
+
+        function copyShareLink() {
+            const params = new URLSearchParams({
+                i: state.invest, b: state.buyPrice, r: state.targetRoi, fx: state.fx, l: currentLang
+            });
+            const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+            navigator.clipboard.writeText(url).then(() => alert('Link copied to clipboard!'));
+        }
+
+        function loadParams() {
+            const p = new URLSearchParams(window.location.search);
+            if (p.has('i')) {
+                state.invest = parseFloat(p.get('i'));
+                state.buyPrice = parseFloat(p.get('b'));
+                state.targetRoi = parseFloat(p.get('r'));
+                state.fx = parseFloat(p.get('fx'));
+                currentLang = p.get('l') || 'th';
+                
+                document.getElementById('invest').value = state.invest.toLocaleString();
+                document.getElementById('buyPrice').value = state.buyPrice.toLocaleString();
+                document.getElementById('targetRoi').value = state.targetRoi;
+                document.getElementById('fxRate').value = state.fx;
+                
+                if (state.buyPrice > 0) {
+                    state.volume = Math.floor(state.invest / state.buyPrice);
+                    document.getElementById('volume').value = state.volume.toLocaleString();
+                    state.sellPrice = state.buyPrice * (1 + (state.targetRoi / 100));
+                    document.getElementById('sellPrice').value = state.sellPrice.toFixed(4);
                 }
-
-                const targetAngle = Math.atan2(velY, velX) * (180 / Math.PI) + 45;
-                rocket.style.transform = `translate(${posX}px, ${posY}px) rotate(${targetAngle}deg)`;
-                requestAnimationFrame(frameUpdate);
-            }
-            requestAnimationFrame(frameUpdate);
-        }
-
-        async function updateLiveCounters() {
-            const now = new Date();
-            const y = now.getFullYear();
-            const m = String(now.getMonth() + 1).padStart(2, '0');
-            const d = String(now.getDate()).padStart(2, '0');
-            
-            const dayKey = `procal_d_${y}${m}${d}`;
-            const monthKey = `procal_m_${y}${m}`;
-            const namespace = "nws_procal_th_analytics_v4";
-
-            const isCounted = sessionStorage.getItem('counted_final_v4');
-            const dailyUrl = isCounted ? `https://api.counterapi.dev/v1/${namespace}/${dayKey}` : `https://api.counterapi.dev/v1/${namespace}/${dayKey}/up`;
-            const monthlyUrl = isCounted ? `https://api.counterapi.dev/v1/${namespace}/${monthKey}` : `https://api.counterapi.dev/v1/${namespace}/${monthKey}/up`;
-
-            try {
-                const [dRes, mRes] = await Promise.all([
-                    fetch(dailyUrl).then(r => r.json()),
-                    fetch(monthlyUrl).then(r => r.json())
-                ]);
-                if(dRes && dRes.value) document.getElementById('dailyViews').textContent = dRes.value.toLocaleString();
-                if(mRes && mRes.value) document.getElementById('monthlyViews').textContent = mRes.value.toLocaleString();
-                sessionStorage.setItem('counted_final_v4', 'true');
-            } catch (err) {
-                document.getElementById('dailyViews').textContent = "1,425";
-                document.getElementById('monthlyViews').textContent = "42,588";
             }
         }
 
-        function formatStringWithCommas(value) {
-            let cleanValue = value.replace(/,/g, '');
-            if (cleanValue === '' || isNaN(cleanValue)) return cleanValue;
-            let endsWithDecimal = cleanValue.endsWith('.');
-            let parts = cleanValue.split('.');
-            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            if (parts.length > 1) return parts[0] + '.' + parts[1].substring(0, 4);
-            return parts[0] + (endsWithDecimal ? '.' : '');
+        function downloadResult() {
+            html2canvas(document.getElementById('resultCard'), { backgroundColor: '#070a14' }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `procal-moon-result.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
         }
-
-        function handleFormattedInput(el, stateKey, calcTrigger) {
-            let cursorPosition = el.selectionStart;
-            let originalLen = el.value.length;
-            let filteredVal = el.value.replace(/[^0-9.,-]/g, '');
-            if ((filteredVal.match(/\./g) || []).length > 1) {
-                filteredVal = filteredVal.substring(0, filteredVal.lastIndexOf('.'));
-            }
-            let formatted = formatStringWithCommas(filteredVal);
-            el.value = formatted;
-            cursorPosition = cursorPosition + (formatted.length - originalLen);
-            el.setSelectionRange(cursorPosition, cursorPosition);
-            
-            state[stateKey] = parseFloat(formatted.replace(/,/g, '')) || 0;
-
-            if (stateKey === 'targetRoi') elements.targetRoiSlider.value = Math.max(-200, Math.min(200, state.targetRoi));
-
-            if (['investment', 'buyPrice', 'volume'].includes(calcTrigger)) {
-                handleBuyCalculation(calcTrigger);
-            } else if (['currentPrice', 'roi', 'targetPrice'].includes(calcTrigger)) {
-                handleTargetCalc(calcTrigger);
-            } else {
-                calculateFullSummary();
-            }
-        }
-
-        function handleSliderChange(val) {
-            state.targetRoi = parseFloat(val);
-            elements.targetRoi.value = formatStringWithCommas(state.targetRoi.toFixed(2));
-            handleTargetCalc('roi');
-        }
-
-        function handleDirectFxInput(el) {
-            state.fxRate = parseFloat(el.value) || 35.0;
-            calculateFullSummary();
-        }
-
-        function setCurrency(target, currency) {
-            if (target === 'invest') {
-                state.investCurrency = currency;
-                document.getElementById('btn-invest-thb').className = currency === 'THB' ? 'px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold' : 'px-2 py-0.5 rounded text-slate-400';
-                document.getElementById('btn-invest-usd').className = currency === 'USD' ? 'px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold' : 'px-2 py-0.5 rounded text-slate-400';
-            } else if (target === 'buyPrice') {
-                state.buyPriceCurrency = currency;
-                document.getElementById('btn-buyPrice-thb').className = currency === 'THB' ? 'px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold' : 'px-2 py-0.5 rounded text-slate-400';
-                document.getElementById('btn-buyPrice-usd').className = currency === 'USD' ? 'px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold' : 'px-2 py-0.5 rounded text-slate-400';
-            }
-            updateCurrencyLabels();
-            handleBuyCalculation('currency_switch');
-        }
-
-        function updateCurrencyLabels() {
-            elements.labelCurPriceMatch.textContent = state.buyPriceCurrency;
-            elements.labelTargetPriceMatch.textContent = state.buyPriceCurrency;
-            elements.otherExpensesCurrency.textContent = state.buyPriceCurrency;
-        }
-
-        function applyFeePreset(val) {
-            elements.feePercent.value = val;
-            state.feePercent = val;
-            calculateFullSummary();
-        }
-
-        function setQuickRoi(percentage) {
-            elements.targetRoi.value = percentage;
-            elements.targetRoiSlider.value = percentage;
-            state.targetRoi = percentage;
-            handleTargetCalc('roi');
-        }
-
-        function handleBuyCalculation(changedField) {
-            const fx = state.fxRate;
-            let investInBuyCurrency = state.investCurrency === state.buyPriceCurrency ? state.investment : (state.investCurrency === 'THB' ? state.investment / fx : state.investment * fx);
-
-            if (['investment', 'buyPrice', 'currency_switch'].includes(changedField) && state.buyPrice > 0) {
-                state.volume = Math.floor(investInBuyCurrency / state.buyPrice);
-                elements.volume.value = state.volume > 0 ? formatStringWithCommas(state.volume.toString()) : "";
-            } else if (changedField === 'volume' && state.volume > 0 && state.buyPrice > 0) {
-                let calcInvest = state.buyPrice * state.volume;
-                state.investment = state.investCurrency === state.buyPriceCurrency ? calcInvest : (state.investCurrency === 'THB' ? calcInvest * fx : calcInvest / fx);
-                elements.investment.value = formatStringWithCommas(state.investment.toFixed(2));
-            }
-            elements.altInvestVal.textContent = state.investment > 0 ? `≃ ${(state.investCurrency === 'THB' ? state.investment / fx : state.investment * fx).toLocaleString(undefined, {maximumFractionDigits: 2})} ${state.investCurrency === 'THB' ? 'USD' : 'THB'}` : '≃ 0.00 USD';
-            elements.altBuyPriceVal.textContent = state.buyPrice > 0 ? `≃ ${(state.buyPriceCurrency === 'THB' ? state.buyPrice / fx : state.buyPrice * fx).toLocaleString(undefined, {maximumFractionDigits: 4})} ${state.buyPriceCurrency === 'THB' ? 'USD' : 'THB'}` : '≃ 0.00 USD';
-            calculateFullSummary();
-        }
-
-        function handleTargetCalc(changedField) {
-            if (state.buyPrice <= 0) return;
-            if (changedField === 'currentPrice') {
-                state.targetRoi = ((state.currentPrice - state.buyPrice) / state.buyPrice) * 100;
-                elements.targetRoi.value = formatStringWithCommas(state.targetRoi.toFixed(2));
-                elements.targetRoiSlider.value = Math.max(-200, Math.min(200, state.targetRoi));
-                state.targetPrice = state.currentPrice;
-                elements.targetPrice.value = formatStringWithCommas(state.targetPrice.toFixed(4));
-            } else if (changedField === 'roi') {
-                state.targetPrice = state.buyPrice * (1 + (state.targetRoi / 100));
-                elements.targetPrice.value = formatStringWithCommas(state.targetPrice.toFixed(4));
-                state.currentPrice = state.targetPrice;
-                elements.currentPrice.value = formatStringWithCommas(state.currentPrice.toFixed(4));
-            } else if (changedField === 'targetPrice') {
-                state.targetRoi = ((state.targetPrice - state.buyPrice) / state.buyPrice) * 100;
-                elements.targetRoi.value = formatStringWithCommas(state.targetRoi.toFixed(2));
-                elements.targetRoiSlider.value = Math.max(-200, Math.min(200, state.targetRoi));
-                state.currentPrice = state.targetPrice;
-                elements.currentPrice.value = formatStringWithCommas(state.currentPrice.toFixed(4));
-            }
-            calculateFullSummary();
-        }
-
-        function calculateFullSummary() {
-            if (state.buyPrice <= 0 || state.volume <= 0) {
-                elements.resultRoiDisplay.textContent = "0.00%";
-                elements.resultProfitDisplay.innerHTML = `
-                    <span class="text-2xl sm:text-3xl font-black tracking-tight block text-slate-400">0.00 ${state.buyPriceCurrency}</span>
-                    <span class="text-xs font-medium text-slate-500 block mt-0.5">≃ 0.00 ${state.buyPriceCurrency === 'THB' ? 'USD' : 'THB'}</span>
-                `;
-                elements.resultRoiDisplay.className = "text-3xl sm:text-4xl font-black font-mono tracking-tight text-slate-300";
-                elements.moonProgressBar.style.width = "50%";
-                elements.distanceToMoonText.textContent = "เตรียมตัวปล่อยยาน";
-                return;
-            }
-            const fee = state.feePercent / 100, tax = state.taxPercent / 100;
-            const grossBuy = state.buyPrice * state.volume;
-            const bComm = grossBuy * fee, bVat = bComm * tax;
-            const totalCost = grossBuy + bComm + bVat + state.otherExpenses;
-
-            const grossSell = state.currentPrice * state.volume;
-            const sComm = grossSell * fee, sVat = sComm * tax;
-            const totalRev = grossSell - sComm - sVat - state.otherExpenses;
-
-            const netProfit = totalRev - totalCost;
-            const netRoi = (netProfit / totalCost) * 100;
-            const breakeven = (totalCost + state.otherExpenses) / (state.volume * (1 - (fee * (1 + tax))));
-
-            elements.detailCommFees.textContent = `${(bComm+sComm).toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
-            elements.detailVatFees.textContent = `${(bVat+sVat).toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
-            elements.detailOtherFees.textContent = `${(state.otherExpenses*2).toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
-            elements.detailTotalFees.textContent = `${(bComm+bVat+sComm+sVat).toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
-            elements.detailBreakevenPrice.textContent = `${breakeven.toLocaleString(undefined, {maximumFractionDigits:4})} ${state.buyPriceCurrency}`;
-
-            const altProfit = state.buyPriceCurrency === 'THB' ? netProfit / state.fxRate : netProfit * state.fxRate;
-            const altCurrency = state.buyPriceCurrency === 'THB' ? 'USD' : 'THB';
-
-            // จัดการสีและคลาสแสดงผลแบบไดนามิก
-            const colorClass = netProfit > 0 ? "text-emerald-400" : (netProfit < 0 ? "text-rose-400" : "text-slate-300");
-            const mutedColorClass = netProfit > 0 ? "text-emerald-500/70" : (netProfit < 0 ? "text-rose-500/70" : "text-slate-500");
-
-            elements.resultRoiDisplay.textContent = `${netProfit >= 0 ? '+' : ''}${netRoi.toFixed(2)}%`;
-            elements.resultRoiDisplay.className = `text-3xl sm:text-4xl font-black font-mono tracking-tight ${colorClass}`;
-
-            elements.resultProfitDisplay.innerHTML = `
-                <span class="text-2xl sm:text-3xl font-black tracking-tight block ${colorClass}">${netProfit >= 0 ? '+' : ''}${netProfit.toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}</span>
-                <span class="text-xs font-medium block mt-0.5 ${mutedColorClass}">≃ ${netProfit >= 0 ? '+' : ''}${altProfit.toLocaleString(undefined, {maximumFractionDigits:2})} ${altCurrency}</span>
-            `;
-
-            elements.moonProgressBar.style.width = `${Math.max(1, Math.min(99, 50 + (netRoi / 4.0)))}%`;
-            elements.distanceToMoonText.textContent = netRoi >= 20 ? "ถึงเป้าหมายดวงจันทร์แล้ว! 🌟" : (netRoi > 0 ? "พุ่งยานอวกาศ! ⚡" : (netRoi === 0 ? "เตรียมตัวปล่อยยาน" : "ติดดอย/แรงโน้มถ่วงดึงดูด 📉"));
-        }
-
-        function resetCalculator() { location.reload(); }
     </script>
 </body>
 </html>
