@@ -4,23 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mission to the moon</title>
-    <!-- นำเข้า Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 1. อัปเกรดแอนิเมชัน: เสกให้จรวดบินโคจรไปทั่วทั้งหน้าจอแบบนุ่มนวลเพลินๆ */
-        @keyframes rocket-orbit {
-            0% { transform: translate(0, 0) rotate(45deg); }
-            25% { transform: translate(65vw, -5vh) rotate(110deg); }
-            50% { transform: translate(45vw, 60vh) rotate(225deg); }
-            75% { transform: translate(-15vw, 35vh) rotate(290deg); }
-            100% { transform: translate(0, 0) rotate(45deg); }
-        }
-        .space-rocket-fly {
-            position: fixed;
-            z-index: 0;
-            animation: rocket-orbit 30s linear infinite;
-        }
-
         /* นีออนสีขาววิ่งรอบกรอบหรูๆ */
         @keyframes neon-dance {
             0% { background-position: 0% 50%; }
@@ -47,497 +32,94 @@
         }
     </style>
 </head>
-<!-- คุมขนาดให้อยู่ในหน้าเดียวบนจอ Desktop -->
-<body class="bg-[#070a14] text-slate-100 xl:h-screen xl:overflow-hidden font-sans antialiased flex flex-col justify-between p-3 select-none">
+<body class="bg-[#070a14] text-slate-100 min-h-screen font-sans antialiased flex flex-col justify-between p-3 xl:p-4 select-none overflow-x-hidden">
 
-    <!-- ตัวจรวดหลัก บินร่อนไปทั่วหน้าจอตามสั่ง (ปรับขนาดใหญ่ขึ้นและชัดขึ้น) -->
-    <div class="fixed top-24 left-24 text-5xl opacity-25 space-rocket-fly pointer-events-none hidden xl:block">🚀</div>
+    <div id="spaceRocket" class="fixed text-3xl opacity-15 pointer-events-none hidden xl:block" style="top: 0; left: 0; transform: translate(0px, 0px) rotate(45deg); will-change: transform; z-index: 1;">🚀</div>
 
-    <!-- Container หลักจัด Layout 3 คอลัมน์ -->
-    <div class="w-full max-w-[1550px] mx-auto my-auto grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch relative z-10">
+    <div class="w-full max-w-[1550px] mx-auto my-auto grid grid-cols-1 xl:grid-cols-12 gap-3.5 items-stretch relative z-10">
         
-        <!-- ================= ช่องโฆษณาด้านซ้าย (SPONSOR SPACE) ================= -->
-        <div class="xl:col-span-2 flex flex-col justify-between bg-[#0e1326]/60 p-4 rounded-xl border border-yellow-500/30 text-center text-sm">
+        <div class="xl:col-span-2 flex flex-col justify-between bg-[#0e1326]/60 p-4 rounded-xl border border-yellow-500/20 text-center text-sm">
             <div>
-                <div class="flex items-center justify-center space-x-1 bg-yellow-500/10 text-yellow-400 font-bold py-1.5 px-3 rounded-full mb-4 border border-yellow-500/20 text-xs">
+                <div class="flex items-center justify-center space-x-1 bg-yellow-500/10 text-yellow-400 font-bold py-1 px-3 rounded-full mb-3 border border-yellow-500/10 text-xs tracking-wider">
                     <span>👑 SPONSOR SPACE</span>
                 </div>
-                <div class="w-full aspect-[4/5] bg-slate-950/80 rounded-lg border border-slate-800 flex flex-col items-center justify-center p-3 text-slate-500 mb-4">
-                    <span class="font-bold text-slate-400 mb-1 text-sm">Wide Skyscraper</span>
-                    <span class="text-xs">160 x 600 px</span>
+                <div class="w-full aspect-[4/5] bg-slate-950/80 rounded-lg border border-slate-800/60 flex flex-col items-center justify-center p-3 text-slate-500 mb-3">
+                    <span class="font-bold text-slate-400 mb-1 text-xs">Wide Skyscraper</span>
+                    <span class="text-[11px]">160 x 600 px</span>
                 </div>
             </div>
-            <div class="space-y-3 bg-slate-950/40 p-3 rounded-lg border border-slate-900">
-                <p class="text-slate-400 text-xs">อัตราค่าโฆษณา</p>
-                <p class="text-xl font-black text-yellow-400 font-mono">฿4,500 <span class="text-xs font-normal text-slate-500">/เดือน</span></p>
-                <p class="text-xs text-slate-500 leading-relaxed text-left">เจาะกลุ่มเป้าหมายนักลงทุนคุณภาพสูง และผู้เล่นคริปโตเคอเรนซีโดยตรง</p>
-                <a href="https://t.me/yourusername" target="_blank" class="block w-full bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold py-2 rounded-lg transition-all text-center text-xs">
+            <div class="space-y-2.5 bg-slate-950/40 p-3 rounded-lg border border-slate-900 mt-auto">
+                <p class="text-xs text-slate-400 leading-relaxed text-center">พื้นที่ประชาสัมพันธ์สำหรับโครงการ คริปโต และบล็อกเชนสตาร์ทอัพ</p>
+                <a href="https://t.me/yourusername" target="_blank" class="block w-full bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold py-1.5 rounded-lg transition-all text-center text-xs">
                     ติดต่อโฆษณา 📩
                 </a>
             </div>
         </div>
 
-        <!-- ================= คอลัมน์กลาง: ตัวเครื่องคิดเลขหลัก ================= -->
-        <div class="xl:col-span-8 flex flex-col justify-between space-y-3.5">
+        <div class="xl:col-span-8 flex flex-col justify-between space-y-3">
             
-            <!-- ส่วนหัวเว็บ (ขยายขนาดตัวอักษร) -->
-            <header class="flex flex-col sm:flex-row justify-between items-center bg-[#0e1326] px-5 py-3 rounded-xl border border-slate-800/60">
+            <header class="flex flex-col sm:flex-row justify-between items-center bg-[#0e1326] px-5 py-2.5 rounded-xl border border-slate-800/60">
                 <div class="flex items-center space-x-3">
-                    <div class="text-3xl">🚀</div>
+                    <div class="text-2xl">🚀</div>
                     <div>
-                        <h1 class="text-2xl font-black tracking-wide text-white">
+                        <h1 class="text-xl font-black tracking-wide text-white">
                             PROCAL.TH <span class="text-xs text-slate-400 font-medium">BY NWS</span>
                         </h1>
-                        <p class="text-xs text-yellow-400 tracking-wider font-bold uppercase mt-0.5">MISSION TO THE MOON STOCK CALCULATOR</p>
+                        <p class="text-[10px] text-yellow-400 tracking-wider font-bold uppercase mt-0.5">MISSION TO THE MOON STOCK CALCULATOR</p>
                     </div>
                 </div>
-                <!-- ส่วนกล่องแสดงอัตราแลกเปลี่ยน -->
-                <div class="flex items-center space-x-2 mt-2 sm:mt-0 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-sm">
+                <div class="flex items-center space-x-2 mt-2 sm:mt-0 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800 text-xs">
                     <label class="text-slate-400 font-mono">อัตราแลกเปลี่ยน USD/THB:</label>
                     <input id="globalFxRate" type="text" value="35.00" oninput="handleDirectFxInput(this)"
-                        class="w-16 bg-transparent text-right font-bold text-yellow-400 font-mono focus:outline-none text-base">
+                        class="w-14 bg-transparent text-right font-bold text-yellow-400 font-mono focus:outline-none text-sm">
                 </div>
             </header>
 
-            <!-- แผงหน้าปัดคำนวณแบ่ง 4 บล็อก (ขยายฟอนต์สเกลขึ้นทั้งหมด) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                 
-                <!-- บล็อก 01: ต้นทุนการซื้อ -->
-                <div class="running-neon p-4 rounded-xl space-y-3.5 text-sm">
-                    <div class="flex justify-between items-center border-b border-yellow-500/20 pb-2">
-                        <h2 class="text-base font-bold text-yellow-400">01 ต้นทุนการซื้อ (Buy Entry)</h2>
-                        <span class="text-xs text-slate-500">กรอก 2 ช่องเพื่อหาค่าที่เหลือ</span>
+                <div class="running-neon p-4 rounded-xl space-y-3 text-sm">
+                    <div class="flex justify-between items-center border-b border-yellow-500/20 pb-1.5">
+                        <h2 class="text-sm font-bold text-yellow-400">01 ต้นทุนการซื้อ (Buy Entry)</h2>
+                        <span class="text-[11px] text-slate-500">กรอก 2 ช่องเพื่อหาค่าที่เหลือ</span>
                     </div>
                     
-                    <div class="space-y-3">
+                    <div class="space-y-2.5">
                         <div>
-                            <div class="flex justify-between mb-1.5">
-                                <span class="text-slate-300 font-medium">เงินลงทุนรวม (INVESTMENT)</span>
-                                <div class="flex space-x-1 bg-slate-950 p-0.5 rounded text-xs">
-                                    <button id="btn-invest-thb" onclick="setCurrency('invest', 'THB')" class="px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold">THB</button>
-                                    <button id="btn-invest-usd" onclick="setCurrency('invest', 'USD')" class="px-2 py-0.5 rounded text-slate-400">USD</button>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-slate-300 font-medium text-xs">เงินลงทุนรวม (INVESTMENT)</span>
+                                <div class="flex space-x-1 bg-slate-950 p-0.5 rounded text-[10px]">
+                                    <button id="btn-invest-thb" onclick="setCurrency('invest', 'THB')" class="px-1.5 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold">THB</button>
+                                    <button id="btn-invest-usd" onclick="setCurrency('invest', 'USD')" class="px-1.5 py-0.5 rounded text-slate-400">USD</button>
                                 </div>
                             </div>
                             <input id="inputInvestment" type="text" placeholder="100,000" oninput="handleFormattedInput(this, 'investment', 'investment')"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-yellow-500 focus:outline-none text-white font-bold">
-                            <span id="alt-invest-val" class="block text-xs text-slate-500 text-right mt-1 font-mono">≃ 0.00 USD</span>
+                                class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 font-mono text-sm focus:border-yellow-500 focus:outline-none text-white font-bold">
+                            <span id="alt-invest-val" class="block text-[11px] text-slate-500 text-right mt-0.5 font-mono">≃ 0.00 USD</span>
                         </div>
 
                         <div>
-                            <div class="flex justify-between mb-1.5">
-                                <span class="text-slate-300 font-medium">ราคาซื้อต่อหุ้น (BUY PRICE)</span>
-                                <div class="flex space-x-1 bg-slate-950 p-0.5 rounded text-xs">
-                                    <button id="btn-buyPrice-thb" onclick="setCurrency('buyPrice', 'THB')" class="px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold">THB</button>
-                                    <button id="btn-buyPrice-usd" onclick="setCurrency('buyPrice', 'USD')" class="px-2 py-0.5 rounded text-slate-400">USD</button>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-slate-300 font-medium text-xs">ราคาซื้อต่อหุ้น (BUY PRICE)</span>
+                                <div class="flex space-x-1 bg-slate-950 p-0.5 rounded text-[10px]">
+                                    <button id="btn-buyPrice-thb" onclick="setCurrency('buyPrice', 'THB')" class="px-1.5 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold">THB</button>
+                                    <button id="btn-buyPrice-usd" onclick="setCurrency('buyPrice', 'USD')" class="px-1.5 py-0.5 rounded text-slate-400">USD</button>
                                 </div>
                             </div>
                             <input id="inputBuyPrice" type="text" placeholder="50" oninput="handleFormattedInput(this, 'buyPrice', 'buyPrice')"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-yellow-500 focus:outline-none text-white font-bold">
-                            <span id="alt-buyPrice-val" class="block text-xs text-slate-500 text-right mt-1 font-mono">≃ 0.00 USD</span>
+                                class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 font-mono text-sm focus:border-yellow-500 focus:outline-none text-white font-bold">
+                            <span id="alt-buyPrice-val" class="block text-[11px] text-slate-500 text-right mt-0.5 font-mono">≃ 0.00 USD</span>
                         </div>
 
                         <div>
-                            <span class="block text-slate-300 font-medium mb-1.5">จำนวนหุ้นที่จะได้รับ (VOLUME)</span>
+                            <span class="block text-slate-300 font-medium mb-1 text-xs">จำนวนหุ้นที่จะได้รับ (VOLUME)</span>
                             <div class="relative">
                                 <input id="inputVolume" type="text" placeholder="2,000" oninput="handleFormattedInput(this, 'volume', 'volume')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-yellow-500 focus:outline-none text-white font-bold">
-                                <span class="absolute right-3 top-2.5 text-slate-500 font-medium">หุ้น</span>
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 font-mono text-sm focus:border-yellow-500 focus:outline-none text-white font-bold">
+                                <span class="absolute right-3 top-2 text-slate-500 font-medium text-xs">หุ้น</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- บล็อก 02: เป้าหมายราคาขาย -->
-                <div class="running-neon p-4 rounded-xl space-y-3.5 text-sm">
-                    <div class="flex justify-between items-center border-b border-emerald-500/20 pb-2">
-                        <h2 class="text-base font-bold text-emerald-400">02 เป้าหมายราคาขาย (Target Exit)</h2>
-                        <span class="text-xs text-slate-500">คำนวณราคาขายตามเป้า</span>
-                    </div>
-
-                    <div class="space-y-3.5">
-                        <div>
-                            <div class="flex justify-between items-center mb-1.5">
-                                <span class="text-slate-300 font-medium">เปอร์เซ็นต์เป้าหมาย (ROI TARGET)</span>
-                                <div class="flex space-x-1 text-xs">
-                                    <button onclick="setQuickRoi(10)" class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20">+10%</button>
-                                    <button onclick="setQuickRoi(50)" class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20">+50%</button>
-                                    <button onclick="setQuickRoi(-10)" class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20">-10%</button>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center space-x-2 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-2">
-                                <input id="inputTargetRoi" type="text" placeholder="10" oninput="handleFormattedInput(this, 'targetRoi', 'roi')"
-                                    class="w-full bg-transparent font-mono text-base focus:outline-none text-white font-bold">
-                                <span class="text-slate-500 font-bold">%</span>
-                            </div>
-                            <input id="targetRoiSlider" type="range" min="-200" max="200" value="0" step="1" oninput="handleSliderChange(this.value)"
-                                class="w-full accent-emerald-500 h-1 bg-slate-800 rounded-lg cursor-pointer mt-2.5">
-                        </div>
-
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5">ราคาตลาดปัจจุบัน (MARKET PRICE)</span>
-                            <div class="relative">
-                                <input id="inputCurrentPrice" type="text" placeholder="55.0000" oninput="handleFormattedInput(this, 'currentPrice', 'currentPrice')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-emerald-500 focus:outline-none text-white font-bold">
-                                <span class="absolute right-3 top-2.5 text-slate-500 font-mono" id="label-curPrice-match">THB</span>
-                            </div>
-                        </div>
-
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5">ราคาเป้าหมายขาย (TARGET PRICE)</span>
-                            <div class="relative">
-                                <input id="inputTargetPrice" type="text" placeholder="55.0000" oninput="handleFormattedInput(this, 'targetPrice', 'targetPrice')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:border-emerald-500 focus:outline-none text-emerald-400 font-bold">
-                                <span class="absolute right-3 top-2.5 text-slate-500 font-mono" id="label-targetPrice-match">THB</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- บล็อก 03: หักค่าธรรมเนียม & ภาษี -->
-                <div class="running-neon p-4 rounded-xl space-y-3.5 text-sm">
-                    <div class="flex justify-between items-center border-b border-purple-500/20 pb-2">
-                        <h2 class="text-base font-bold text-purple-400">03 หักค่าธรรมเนียม & ภาษี (Fees & Expenses)</h2>
-                        <div class="flex space-x-1 text-[10px]">
-                            <button onclick="applyFeePreset(0.157)" class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300">คอมไทย (0.157%)</button>
-                            <button onclick="applyFeePreset(0.08)" class="px-2 py-0.5 rounded bg-slate-800 text-slate-400">ออนไลน์ (0.08%)</button>
-                            <button onclick="applyFeePreset(0)" class="px-2 py-0.5 rounded bg-slate-800 text-slate-400">ไม่คิดฟี</button>
-                        </div>
-                    </div>
-
-                    <div class="space-y-3 text-sm">
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5">ค่าคอมมิชชันโบรกเกอร์ (%)</span>
-                            <div class="relative">
-                                <input id="inputFeePercent" type="text" value="0.157" oninput="handleFormattedInput(this, 'feePercent', 'fee')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:outline-none text-white">
-                                <span class="absolute right-3 top-2.5 text-slate-500">%</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5">ภาษีมูลค่าเพิ่ม VAT (%)</span>
-                            <div class="relative">
-                                <input id="inputTaxPercent" type="text" value="7.0" oninput="handleFormattedInput(this, 'taxPercent', 'tax')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:outline-none text-white">
-                                <span class="absolute right-3 top-2.5 text-slate-500">%</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="block text-slate-300 font-medium mb-1.5">ค่าใช้จ่ายเพิ่มเติมอื่น ๆ (ต่อรอบ)</span>
-                            <div class="relative">
-                                <input id="inputOtherExpenses" type="text" value="0" oninput="handleFormattedInput(this, 'otherExpenses', 'expenses')"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 font-mono text-base focus:outline-none text-white">
-                                <span class="absolute right-3 top-2.5 text-slate-500 font-mono" id="other-expenses-currency">THB</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- บล็อก 04: สรุปผลตอบแทนสุทธิและการเดินทาง -->
-                <div id="resultCard" class="running-neon p-4 rounded-xl space-y-3 flex flex-col justify-between text-sm">
-                    <div>
-                        <div class="flex justify-between items-center border-b border-cyan-500/20 pb-2">
-                            <span class="text-sm font-bold text-cyan-400">เป้าหมายระยะการเดินทาง (MOON PROGRESS)</span>
-                            <span id="distanceToMoonText" class="text-xs text-slate-400 font-bold">เตรียมตัวปล่อยยาน</span>
-                        </div>
-                        <div class="relative w-full h-3 bg-slate-950 rounded-full border border-slate-800 overflow-hidden mt-2.5">
-                            <div id="moonProgressBar" class="absolute left-0 top-0 bottom-0 bg-gradient-to-r from-rose-500 via-yellow-500 to-emerald-500 glow-pulse" style="width: 50%;"></div>
-                        </div>
-                    </div>
-
-                    <!-- รายงานผลลัพธ์ตัวเลขใหญ่ๆ เต็มตา -->
-                    <div class="grid grid-cols-2 gap-2 border-t border-b border-slate-800/80 py-2.5">
-                        <div>
-                            <span class="block text-xs text-slate-400">ผลตอบแทนสุทธิ (NET P/L)</span>
-                            <h1 id="resultRoiDisplay" class="text-3xl font-black font-mono text-slate-300">0.00%</h1>
-                        </div>
-                        <div class="text-right">
-                            <span class="block text-xs text-slate-400">&nbsp;</span>
-                            <h2 id="resultProfitDisplay" class="text-xl font-bold font-mono text-slate-400">0.00 THB</h2>
-                        </div>
-                    </div>
-
-                    <div class="text-xs font-mono space-y-1.5 text-slate-400">
-                        <div class="flex justify-between">
-                            <span>💸 ค่าคอมรวม (Comm):</span>
-                            <span id="detailCommFees" class="text-slate-200 font-medium">0.00 THB</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>🧾 ภาษีรวม (VAT):</span>
-                            <span id="detailVatFees" class="text-slate-200 font-medium">0.00 THB</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>⚓ ค่าอื่น ๆ (Other Exp):</span>
-                            <span id="detailOtherFees" class="text-slate-200 font-medium">0.00 THB</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-yellow-500/10 p-2.5 rounded-lg border border-yellow-500/20 flex justify-between items-center text-sm">
-                        <span class="font-bold text-yellow-500">⚖️ จุดคุ้มทุน (Breakeven Price):</span>
-                        <span id="detailBreakevenPrice" class="font-black text-yellow-400 font-mono text-base">0.00 THB</span>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- แถบสรุปรวมท้ายแถวกลาง -->
-            <footer class="flex justify-between items-center text-sm bg-slate-950/60 p-3 rounded-xl border border-slate-900 font-mono">
-                <div class="text-slate-300 flex items-center space-x-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
-                    <span>ยอดหักสะสมรวม (Comm + VAT): <span id="detailTotalFees" class="text-purple-400 font-bold">0.00 THB</span></span>
-                </div>
-                <button onclick="resetCalculator()" class="text-slate-400 hover:text-white transition-all flex items-center space-x-1 text-xs">
-                    <span>🔄 รีเซ็ตค่าทั้งหมด</span>
-                </button>
-            </footer>
-
-        </div>
-
-        <!-- ================= ช่องโฆษณาด้านขวา (SPONSOR SPACE) ================= -->
-        <div class="xl:col-span-2 flex flex-col justify-between bg-[#0e1326]/60 p-4 rounded-xl border border-emerald-500/30 text-center text-sm">
-            <div>
-                <div class="flex items-center justify-center space-x-1 bg-emerald-500/10 text-emerald-400 font-bold py-1.5 px-3 rounded-full mb-4 border border-emerald-500/20 text-xs">
-                    <span>✳️ SPONSOR SPACE</span>
-                </div>
-                <div class="w-full aspect-[4/5] bg-slate-950/80 rounded-lg border border-slate-800 flex flex-col items-center justify-center p-3 text-slate-500 mb-4">
-                    <span class="font-bold text-slate-400 mb-1 text-sm">Skyscraper</span>
-                    <span class="text-xs">120 x 600 px</span>
-                </div>
-            </div>
-            <div class="space-y-3 bg-slate-950/40 p-3 rounded-lg border border-slate-900">
-                <p class="text-slate-400 text-xs">อัตราค่าโฆษณา</p>
-                <p class="text-xl font-black text-emerald-400 font-mono">$3,000 <span class="text-xs font-normal text-slate-500">/เดือน</span></p>
-                <p class="text-xs text-slate-500 leading-relaxed text-left">เน้นการรับรู้แบรนด์และผลตอบแทนที่คุ้มค่า เจาะตลาดกลุ่มเทรดเดอร์</p>
-                <a href="https://t.me/yourusername" target="_blank" class="block w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 rounded-lg transition-all text-center text-xs">
-                    ติดต่อโฆษณา 📩
-                </a>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ================= 2. บาร์ล่างสุดพร้อมจำนวนผู้เข้าชมแบบแบ่ง 2 บรรทัด (รายวัน & รายเดือน) เด่นชัดสวยงาม ================= -->
-    <footer class="w-full max-w-[1550px] mx-auto flex justify-between items-end text-xs text-slate-500 mt-2 font-mono px-2 relative z-10">
-        <div class="pb-1">© 2026 PROCAL.TH ALL RIGHTS RESERVED <br><span class="text-[10px] text-slate-700">SYSTEM STATUS: ONLINE | SECURE</span></div>
-        
-        <!-- กล่องนับผู้เข้าชม 2 บรรทัดตามบรีฟ ตกแต่งนีออนสไตล์เข้ากับหน้าเว็บ -->
-        <div class="text-right space-y-1 bg-[#0e1326]/80 p-2.5 rounded-lg border border-slate-800 font-sans text-xs">
-            <div class="flex justify-between items-center space-x-4">
-                <span class="text-slate-400">📊 ผู้เข้าชมวันนี้:</span>
-                <span class="text-yellow-400 font-black font-mono">1,425 <span class="text-[10px] font-normal text-slate-500">คน</span></span>
-            </div>
-            <div class="flex justify-between items-center space-x-4 border-t border-slate-800/60 pt-1">
-                <span class="text-slate-400">📅 ผู้เข้าชมเดือนนี้:</span>
-                <span class="text-emerald-400 font-black font-mono">42,580 <span class="text-[10px] font-normal text-slate-500">คน</span></span>
-            </div>
-        </div>
-    </footer>
-
-    <!-- สคริปต์ระบบคำนวณหลังบ้าน -->
-    <script>
-        let state = {
-            investCurrency: 'THB',
-            buyPriceCurrency: 'THB',
-            investment: 0,
-            buyPrice: 0,
-            volume: 0,
-            currentPrice: 0,
-            targetRoi: 0,
-            targetPrice: 0,
-            fxRate: 35.0,
-            feePercent: 0.157,
-            taxPercent: 7.0,
-            otherExpenses: 0
-        };
-
-        const elements = {
-            investment: document.getElementById('inputInvestment'),
-            buyPrice: document.getElementById('inputBuyPrice'),
-            volume: document.getElementById('inputVolume'),
-            currentPrice: document.getElementById('inputCurrentPrice'),
-            targetRoi: document.getElementById('inputTargetRoi'),
-            targetRoiSlider: document.getElementById('targetRoiSlider'),
-            targetPrice: document.getElementById('inputTargetPrice'),
-            fxRate: document.getElementById('globalFxRate'),
-            feePercent: document.getElementById('inputFeePercent'),
-            taxPercent: document.getElementById('inputTaxPercent'),
-            otherExpenses: document.getElementById('inputOtherExpenses'),
-            labelCurPriceMatch: document.getElementById('label-curPrice-match'),
-            labelTargetPriceMatch: document.getElementById('label-targetPrice-match'),
-            otherExpensesCurrency: document.getElementById('other-expenses-currency'),
-            altInvestVal: document.getElementById('alt-invest-val'),
-            altBuyPriceVal: document.getElementById('alt-buyPrice-val'),
-            resultRoiDisplay: document.getElementById('resultRoiDisplay'),
-            resultProfitDisplay: document.getElementById('resultProfitDisplay'),
-            detailCommFees: document.getElementById('detailCommFees'),
-            detailVatFees: document.getElementById('detailVatFees'),
-            detailOtherFees: document.getElementById('detailOtherFees'),
-            detailTotalFees: document.getElementById('detailTotalFees'),
-            detailBreakevenPrice: document.getElementById('detailBreakevenPrice'),
-            moonProgressBar: document.getElementById('moonProgressBar'),
-            distanceToMoonText: document.getElementById('distanceToMoonText')
-        };
-
-        window.onload = function() {
-            updateCurrencyLabels();
-            calculateFullSummary();
-        };
-
-        function formatStringWithCommas(value) {
-            let cleanValue = value.replace(/,/g, '');
-            if (cleanValue === '' || isNaN(cleanValue)) return cleanValue;
-            let endsWithDecimal = cleanValue.endsWith('.');
-            let parts = cleanValue.split('.');
-            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            if (parts.length > 1) return parts[0] + '.' + parts[1].substring(0, 4);
-            return parts[0] + (endsWithDecimal ? '.' : '');
-        }
-
-        function handleFormattedInput(el, stateKey, calcTrigger) {
-            let cursorPosition = el.selectionStart;
-            let originalLen = el.value.length;
-            let filteredVal = el.value.replace(/[^0-9.,-]/g, '');
-            if ((filteredVal.match(/\./g) || []).length > 1) {
-                filteredVal = filteredVal.substring(0, filteredVal.lastIndexOf('.'));
-            }
-            let formatted = formatStringWithCommas(filteredVal);
-            el.value = formatted;
-            cursorPosition = cursorPosition + (formatted.length - originalLen);
-            el.setSelectionRange(cursorPosition, cursorPosition);
-            
-            state[stateKey] = parseFloat(formatted.replace(/,/g, '')) || 0;
-
-            if (stateKey === 'targetRoi') elements.targetRoiSlider.value = Math.max(-200, Math.min(200, state.targetRoi));
-
-            if (['investment', 'buyPrice', 'volume'].includes(calcTrigger)) {
-                handleBuyCalculation(calcTrigger);
-            } else if (['currentPrice', 'roi', 'targetPrice'].includes(calcTrigger)) {
-                handleTargetCalc(calcTrigger);
-            } else {
-                calculateFullSummary();
-            }
-        }
-
-        function handleSliderChange(val) {
-            state.targetRoi = parseFloat(val);
-            elements.targetRoi.value = formatStringWithCommas(state.targetRoi.toFixed(2));
-            handleTargetCalc('roi');
-        }
-
-        function handleDirectFxInput(el) {
-            state.fxRate = parseFloat(el.value) || 35.0;
-            calculateFullSummary();
-        }
-
-        function setCurrency(target, currency) {
-            if (target === 'invest') {
-                state.investCurrency = currency;
-                document.getElementById('btn-invest-thb').className = currency === 'THB' ? 'px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold' : 'px-2 py-0.5 rounded text-slate-400';
-                document.getElementById('btn-invest-usd').className = currency === 'USD' ? 'px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold' : 'px-2 py-0.5 rounded text-slate-400';
-            } else if (target === 'buyPrice') {
-                state.buyPriceCurrency = currency;
-                document.getElementById('btn-buyPrice-thb').className = currency === 'THB' ? 'px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold' : 'px-2 py-0.5 rounded text-slate-400';
-                document.getElementById('btn-buyPrice-usd').className = currency === 'USD' ? 'px-2 py-0.5 rounded bg-yellow-500 text-slate-950 font-bold' : 'px-2 py-0.5 rounded text-slate-400';
-            }
-            updateCurrencyLabels();
-            handleBuyCalculation('currency_switch');
-        }
-
-        function updateCurrencyLabels() {
-            elements.labelCurPriceMatch.textContent = state.buyPriceCurrency;
-            elements.labelTargetPriceMatch.textContent = state.buyPriceCurrency;
-            elements.otherExpensesCurrency.textContent = state.buyPriceCurrency;
-        }
-
-        function applyFeePreset(val) {
-            elements.feePercent.value = val;
-            state.feePercent = val;
-            calculateFullSummary();
-        }
-
-        function setQuickRoi(percentage) {
-            elements.targetRoi.value = percentage;
-            elements.targetRoiSlider.value = percentage;
-            state.targetRoi = percentage;
-            handleTargetCalc('roi');
-        }
-
-        function handleBuyCalculation(changedField) {
-            const fx = state.fxRate;
-            let investInBuyCurrency = state.investCurrency === state.buyPriceCurrency ? state.investment : (state.investCurrency === 'THB' ? state.investment / fx : state.investment * fx);
-
-            if (['investment', 'buyPrice', 'currency_switch'].includes(changedField) && state.buyPrice > 0) {
-                state.volume = Math.floor(investInBuyCurrency / state.buyPrice);
-                elements.volume.value = state.volume > 0 ? formatStringWithCommas(state.volume.toString()) : "";
-            } else if (changedField === 'volume' && state.volume > 0 && state.buyPrice > 0) {
-                let calcInvest = state.buyPrice * state.volume;
-                state.investment = state.investCurrency === state.buyPriceCurrency ? calcInvest : (state.investCurrency === 'THB' ? calcInvest * fx : calcInvest / fx);
-                elements.investment.value = formatStringWithCommas(state.investment.toFixed(2));
-            }
-            elements.altInvestVal.textContent = state.investment > 0 ? `≃ ${(state.investCurrency === 'THB' ? state.investment / fx : state.investment * fx).toLocaleString(undefined, {maximumFractionDigits: 2})} ${state.investCurrency === 'THB' ? 'USD' : 'THB'}` : '≃ 0.00 USD';
-            elements.altBuyPriceVal.textContent = state.buyPrice > 0 ? `≃ ${(state.buyPriceCurrency === 'THB' ? state.buyPrice / fx : state.buyPrice * fx).toLocaleString(undefined, {maximumFractionDigits: 4})} ${state.buyPriceCurrency === 'THB' ? 'USD' : 'THB'}` : '≃ 0.00 USD';
-            calculateFullSummary();
-        }
-
-        function handleTargetCalc(changedField) {
-            if (state.buyPrice <= 0) return;
-            if (changedField === 'currentPrice') {
-                state.targetRoi = ((state.currentPrice - state.buyPrice) / state.buyPrice) * 100;
-                elements.targetRoi.value = formatStringWithCommas(state.targetRoi.toFixed(2));
-                elements.targetRoiSlider.value = Math.max(-200, Math.min(200, state.targetRoi));
-                state.targetPrice = state.currentPrice;
-                elements.targetPrice.value = formatStringWithCommas(state.targetPrice.toFixed(4));
-            } else if (changedField === 'roi') {
-                state.targetPrice = state.buyPrice * (1 + (state.targetRoi / 100));
-                elements.targetPrice.value = formatStringWithCommas(state.targetPrice.toFixed(4));
-                state.currentPrice = state.targetPrice;
-                elements.currentPrice.value = formatStringWithCommas(state.currentPrice.toFixed(4));
-            } else if (changedField === 'targetPrice') {
-                state.targetRoi = ((state.targetPrice - state.buyPrice) / state.buyPrice) * 100;
-                elements.targetRoi.value = formatStringWithCommas(state.targetRoi.toFixed(2));
-                elements.targetRoiSlider.value = Math.max(-200, Math.min(200, state.targetRoi));
-                state.currentPrice = state.targetPrice;
-                elements.currentPrice.value = formatStringWithCommas(state.currentPrice.toFixed(4));
-            }
-            calculateFullSummary();
-        }
-
-        function calculateFullSummary() {
-            if (state.buyPrice <= 0 || state.volume <= 0) {
-                elements.resultRoiDisplay.textContent = "0.00%";
-                elements.resultProfitDisplay.textContent = `0.00 ${state.buyPriceCurrency}`;
-                elements.moonProgressBar.style.width = "50%";
-                elements.distanceToMoonText.textContent = "เตรียมตัวปล่อยยาน";
-                return;
-            }
-            const fee = state.feePercent / 100, tax = state.taxPercent / 100;
-            const grossBuy = state.buyPrice * state.volume;
-            const bComm = grossBuy * fee, bVat = bComm * tax;
-            const totalCost = grossBuy + bComm + bVat + state.otherExpenses;
-
-            const grossSell = state.currentPrice * state.volume;
-            const sComm = grossSell * fee, sVat = sComm * tax;
-            const totalRev = grossSell - sComm - sVat - state.otherExpenses;
-
-            const netProfit = totalRev - totalCost;
-            const netRoi = (netProfit / totalCost) * 100;
-            const breakeven = (totalCost + state.otherExpenses) / (state.volume * (1 - (fee * (1 + tax))));
-
-            elements.detailCommFees.textContent = `${(bComm+sComm).toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
-            elements.detailVatFees.textContent = `${(bVat+sVat).toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
-            elements.detailOtherFees.textContent = `${(state.otherExpenses*2).toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
-            elements.detailTotalFees.textContent = `${(bComm+bVat+sComm+sVat).toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
-            elements.detailBreakevenPrice.textContent = `${breakeven.toLocaleString(undefined, {maximumFractionDigits:4})} ${state.buyPriceCurrency}`;
-
-            elements.resultRoiDisplay.textContent = `${netProfit >= 0 ? '+' : ''}${netRoi.toFixed(2)}%`;
-            elements.resultProfitDisplay.textContent = `${netProfit >= 0 ? '+' : ''}${netProfit.toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
-            elements.resultRoiDisplay.className = netProfit > 0 ? "text-3xl font-black font-mono text-emerald-400" : (netProfit < 0 ? "text-3xl font-black font-mono text-rose-400" : "text-3xl font-black font-mono text-slate-300");
-
-            elements.moonProgressBar.style.width = `${Math.max(1, Math.min(99, 50 + (netRoi / 4.0)))}%`;
-            elements.distanceToMoonText.textContent = netRoi >= 20 ? "ถึงเป้าหมายดวงจันทร์แล้ว! 🌟" : (netRoi > 0 ? "พุ่งยานอวกาศ! ⚡" : (netRoi === 0 ? "เตรียมตัวปล่อยยาน" : "ติดดอย/แรงโน้มถ่วงดึงดูด 📉"));
-        }
-
-        function resetCalculator() { location.reload(); }
-    </script>
-</body>
-</html>
+                <div class="running-neon p-4 rounded-xl space-y-3 text-sm">
+                    <div class="flex justify-between items-center border-b border-emerald
