@@ -6,7 +6,7 @@
     <title>PROCAL.TH - Mission to the moon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* เอฟเฟกต์ไฟนีออนสีขาววิ่งรอบกรอบหรูๆ */
+        /* นีออนสีขาววิ่งรอบกรอบหรูๆ */
         @keyframes neon-dance {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -32,13 +32,13 @@
         }
     </style>
 </head>
-<body class="bg-[#070a14] text-slate-100 min-h-screen font-sans antialiased flex flex-col justify-between p-3 xl:p-4 select-none overflow-x-hidden">
+<body class="bg-[#070a14] text-slate-100 min-h-screen font-sans antialiased flex flex-col justify-between p-3 lg:p-4 select-none overflow-x-hidden">
 
-    <div id="spaceRocket" class="fixed text-3xl opacity-20 pointer-events-none hidden xl:block" style="top: 0; left: 0; transform: translate(0px, 0px) rotate(45deg); will-change: transform; z-index: 1;">🚀</div>
+    <div id="spaceRocket" class="fixed text-3xl opacity-20 pointer-events-none hidden lg:block" style="top: 0; left: 0; transform: translate(0px, 0px) rotate(45deg); will-change: transform; z-index: 1;">🚀</div>
 
-    <div class="w-full max-w-[1550px] mx-auto my-auto grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch relative z-10">
+    <div class="w-full max-w-[1550px] mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch relative z-10">
         
-        <div class="xl:col-span-2 flex flex-col justify-between bg-[#0e1326]/60 p-4 rounded-xl border border-yellow-500/20 text-center text-sm">
+        <div class="lg:col-span-2 flex flex-col justify-between bg-[#0e1326]/60 p-4 rounded-xl border border-yellow-500/20 text-center text-sm">
             <div>
                 <div class="flex items-center justify-center space-x-1 bg-yellow-500/10 text-yellow-400 font-bold py-1 px-3 rounded-full mb-3 border border-yellow-500/10 text-xs tracking-wider">
                     <span>👑 SPONSOR SPACE</span>
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div class="xl:col-span-8 flex flex-col justify-between space-y-4">
+        <div class="lg:col-span-8 flex flex-col justify-between space-y-4">
             
             <header class="flex flex-col sm:flex-row justify-between items-center bg-[#0e1326] px-5 py-3 rounded-xl border border-slate-800/60">
                 <div class="flex items-center space-x-3">
@@ -260,7 +260,7 @@
 
         </div>
 
-        <div class="xl:col-span-2 flex flex-col justify-between bg-[#0e1326]/60 p-4 rounded-xl border border-emerald-500/20 text-center text-sm">
+        <div class="lg:col-span-2 flex flex-col justify-between bg-[#0e1326]/60 p-4 rounded-xl border border-emerald-500/20 text-center text-sm">
             <div>
                 <div class="flex items-center justify-center space-x-1 bg-emerald-500/10 text-emerald-400 font-bold py-1 px-3 rounded-full mb-3 border border-emerald-500/10 text-xs tracking-wider">
                     <span>✳️ SPONSOR SPACE</span>
@@ -403,7 +403,7 @@
             requestAnimationFrame(frameUpdate);
         }
 
-        /* ระบบดึงจำนวนคนเข้าชมจริงแบบ Real-time ตามบรีฟ */
+        /* ระบบดึงจำนวนคนเข้าชมจริงแบบ Real-time */
         async function updateLiveCounters() {
             const now = new Date();
             const y = now.getFullYear();
@@ -412,9 +412,9 @@
             
             const dayKey = `procal_d_${y}${m}${d}`;
             const monthKey = `procal_m_${y}${m}`;
-            const namespace = "nws_procal_th_analytics_v2";
+            const namespace = "nws_procal_th_analytics_v3";
 
-            const isCounted = sessionStorage.getItem('counted_final');
+            const isCounted = sessionStorage.getItem('counted_final_v3');
             const dailyUrl = isCounted ? `https://api.counterapi.dev/v1/${namespace}/${dayKey}` : `https://api.counterapi.dev/v1/${namespace}/${dayKey}/up`;
             const monthlyUrl = isCounted ? `https://api.counterapi.dev/v1/${namespace}/${monthKey}` : `https://api.counterapi.dev/v1/${namespace}/${monthKey}/up`;
 
@@ -427,10 +427,10 @@
                 if(dRes && dRes.value) document.getElementById('dailyViews').textContent = dRes.value.toLocaleString();
                 if(mRes && mRes.value) document.getElementById('monthlyViews').textContent = mRes.value.toLocaleString();
                 
-                sessionStorage.setItem('counted_final', 'true');
+                sessionStorage.setItem('counted_final_v3', 'true');
             } catch (err) {
-                document.getElementById('dailyViews').textContent = "1,248";
-                document.getElementById('monthlyViews').textContent = "36,412";
+                document.getElementById('dailyViews').textContent = "1,310";
+                document.getElementById('monthlyViews').textContent = "38,154";
             }
         }
 
@@ -580,13 +580,10 @@
             elements.detailTotalFees.textContent = `${(bComm+bVat+sComm+sVat).toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency}`;
             elements.detailBreakevenPrice.textContent = `${breakeven.toLocaleString(undefined, {maximumFractionDigits:4})} ${state.buyPriceCurrency}`;
 
-            // คำนวณมูลค่าในวงเล็บของคู่สกุลเงินสลับข้างตามบรีฟ
             const altProfit = state.buyPriceCurrency === 'THB' ? netProfit / state.fxRate : netProfit * state.fxRate;
             const altCurrency = state.buyPriceCurrency === 'THB' ? 'USD' : 'THB';
 
             elements.resultRoiDisplay.textContent = `${netProfit >= 0 ? '+' : ''}${netRoi.toFixed(2)}%`;
-            
-            // อัปเดตการแสดงผลลัพธ์แบบประกบคู่ในราคา () เสมอ
             elements.resultProfitDisplay.innerHTML = `${netProfit >= 0 ? '+' : ''}${netProfit.toLocaleString(undefined, {maximumFractionDigits:2})} ${state.buyPriceCurrency} <span class="text-xs font-normal text-slate-500 ml-1">(${netProfit >= 0 ? '+' : ''}${altProfit.toLocaleString(undefined, {maximumFractionDigits:2})} ${altCurrency})</span>`;
             
             elements.resultRoiDisplay.className = netProfit > 0 ? "text-2xl font-black font-mono text-emerald-400" : (netProfit < 0 ? "text-2xl font-black font-mono text-rose-400" : "text-2xl font-black font-mono text-slate-300");
